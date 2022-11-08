@@ -1,4 +1,4 @@
-const AdminHomePage = () => <p>Admin home page!</p>;
+const AdminHomePage = () => <p>Home page!</p>;
 
 AdminHomePage.propTypes = {};
 

@@ -7,6 +7,8 @@ const AdminLeaderboardsPage = () => {
     useEffect(() => {
         setPageTitle("Leaderboards");
     }, [setPageTitle]);
+
+    return <p>Leaderboards page!</p>;
 };
 
 AdminLeaderboardsPage.propTypes = {};

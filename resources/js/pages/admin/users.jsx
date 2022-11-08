@@ -7,6 +7,8 @@ const AdminUsersPage = () => {
     useEffect(() => {
         setPageTitle("Users");
     }, [setPageTitle]);
+
+    return <p>Users page!</p>;
 };
 
 AdminUsersPage.propTypes = {};
