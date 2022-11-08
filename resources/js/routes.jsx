@@ -1,16 +1,27 @@
 import { createBrowserRouter } from "react-router-dom";
-import SidebarLayout from "./layouts/sidebar-layout";
+import AdminLayout from "./layouts/admin";
 import ErrorPage from "./pages/error";
-import HomePage from "./pages/home";
+import AdminHomePage from "./pages/admin/home";
 
 const router = createBrowserRouter([
+    /*
+     * Public routes
+     */
     {
-        element: <SidebarLayout />,
+        errorElement: <ErrorPage />,
+    },
+
+    /*
+     * Admin routes
+     */
+    {
+        path: "/admin",
+        element: <AdminLayout />,
         errorElement: <ErrorPage />,
         children: [
             {
-                path: "/",
-                element: <HomePage />,
+                element: <AdminHomePage />,
+                index: true,
             },
         ],
     },

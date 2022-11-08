@@ -11,20 +11,23 @@ const ErrorPage = () => {
             <div className="mx-auto max-w-max">
                 <main className="sm:flex">
                     <Heading as="p" level={1} color="brand">
-                        {error.status}
+                        {error.status || "Oops"}
                     </Heading>
                     <div className="sm:ml-6">
                         <div className="sm:border-l sm:border-gray-300 sm:pl-6">
                             <Heading level={1} className="mb-2">
-                                {error.statusText}
+                                {error.statusText || "Unknown Error"}
                             </Heading>
                             <P color="muted">Please check the URL in the address bar and try again.</P>
                         </div>
+                        {/*
+						TODO - Can we send people anywhere from here? Admins to /admin maybe?
                         <div className="mt-10 sm:border-l sm:border-transparent sm:pl-6">
                             <Button color="brand" to="/">
                                 Back to safety
                             </Button>
                         </div>
+						*/}
                     </div>
                 </main>
             </div>
