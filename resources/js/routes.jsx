@@ -4,6 +4,7 @@ import ErrorPage from "./pages/error";
 import AdminHomePage from "./pages/admin/home";
 import AdminLeaderboardsPage from "./pages/admin/leaderboards";
 import AdminUsersPage from "./pages/admin/users";
+import AdminLoginPage from "./pages/admin/login";
 
 const router = createBrowserRouter([
     /*
@@ -16,6 +17,11 @@ const router = createBrowserRouter([
     /*
      * Admin routes
      */
+    {
+        path: "/admin/login",
+        element: <AdminLoginPage />,
+        errorElement: <ErrorPage />,
+    },
     {
         path: "/admin",
         element: <AdminLayout />,

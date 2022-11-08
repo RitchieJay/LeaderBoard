@@ -12,6 +12,7 @@ const Logo = ({ color = "brand", size = "base", className, ...rest }) => (
 
                 // Size
                 "h-6 w-6": size === "base",
+                "h-12 w-12": size === "lg",
             },
             className
         )}
@@ -21,7 +22,7 @@ const Logo = ({ color = "brand", size = "base", className, ...rest }) => (
 
 Logo.propTypes = {
     color: PropTypes.oneOf(["brand", "white"]),
-    size: PropTypes.oneOf(["base"]),
+    size: PropTypes.oneOf(["base", "lg"]),
     className: PropTypes.string,
 };
 
