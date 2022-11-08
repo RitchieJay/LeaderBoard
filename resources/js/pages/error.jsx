@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useRouteError } from "react-router-dom";
 import Heading from "../components/heading";
-import P from "../components/paragraph";
 import { useNavigationContext } from "../contexts/navigation";
 
 const ErrorPage = () => {
@@ -24,7 +23,7 @@ const ErrorPage = () => {
                             <Heading level={1} className="mb-2">
                                 {error.statusText || "Unknown Error"}
                             </Heading>
-                            <P color="muted">Please check the URL in the address bar and try again.</P>
+                            <p className="text-gray-500">Please check the URL in the address bar and try again.</p>
                         </div>
                         {/*
 						TODO - Can we send people anywhere from here? Admins to /admin maybe?

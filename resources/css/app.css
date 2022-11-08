@@ -11,4 +11,8 @@
     #app {
         @apply h-full;
     }
+
+    p {
+        @apply text-base font-normal leading-normal text-gray-900;
+    }
 }
