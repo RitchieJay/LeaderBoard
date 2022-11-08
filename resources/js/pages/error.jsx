@@ -1,10 +1,16 @@
+import { useEffect } from "react";
 import { useRouteError } from "react-router-dom";
 import Heading from "../components/heading";
 import P from "../components/paragraph";
-import Button from "../components/button";
+import { useNavigationContext } from "../contexts/navigation";
 
 const ErrorPage = () => {
+    const { setPageTitle } = useNavigationContext();
     const error = useRouteError();
+
+    useEffect(() => {
+        setPageTitle("Error");
+    }, [setPageTitle]);
 
     return (
         <div className="min-h-full px-4 py-16 sm:grid sm:place-items-center sm:px-6 sm:py-24 lg:px-8">

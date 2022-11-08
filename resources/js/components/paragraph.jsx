@@ -10,6 +10,7 @@ const P = ({ color = "default", children, className, ...rest }) => (
                 // Colors
                 "text-gray-900": color === "default",
                 "text-gray-500": color === "muted",
+                "text-white": color === "white",
             },
             className
         )}
