@@ -1,42 +1,46 @@
 <?php
 
-namespace App\Models\Auth;
+namespace App\Models;
 
 use App\Models\Utility\SerializableDateTime;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Str;
 use stdClass;
 
-class LoggedInUser implements Authenticatable
+class User implements Authenticatable
 {
 	public int $usersId;
-	public int $personCode;
 	public string $displayName;
 	public bool $isAdmin;
 	public SerializableDateTime $createdAt;
 	public bool $isActive;
-	public string $privateId;
-	public string $privateForename;
-	public string $privateSurname;
-	public string $privateUsername;
+	public ?string $privateId;
+	public ?int $privatePersonCode;
+	public ?string $privateForename;
+	public ?string $privateSurname;
+	public ?string $privateUsername;
 
 	/**
 	 * Constructs an instance of the model with the given data.
 	 *
 	 * @param stdClass $data
+	 * @param bool $includePrivateFields
 	 */
-	public function __construct(stdClass $data)
+	public function __construct(stdClass $data, bool $includePrivateFields = false)
 	{
 		$this->usersId = $data->users_id;
-		$this->personCode = $data->person_code;
 		$this->displayName = $data->display_name;
 		$this->isAdmin = (bool)$data->is_admin;
 		$this->createdAt = SerializableDateTime::fromDateTime($data->created_at);
 		$this->isActive = (bool)$data->is_active;
-		$this->privateId = $data->private_id;
-		$this->privateForename = $data->private_forename;
-		$this->privateSurname = $data->private_surname;
-		$this->privateUsername = $data->private_username;
+
+		if ($includePrivateFields) {
+			$this->privateId = $data->private_id;
+			$this->privatePersonCode = $data->private_person_code;
+			$this->privateForename = $data->private_forename;
+			$this->privateSurname = $data->private_surname;
+			$this->privateUsername = $data->private_username;
+		}
 	}
 
     /**

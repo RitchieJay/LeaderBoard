@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Repositories\AuthRepository;
+use App\Repositories\UsersRepository;
 use App\Services\Auth\AzureGuard;
 use App\Services\Auth\AzureTokenValidator;
 use App\Services\Auth\DbUserProvider;
@@ -31,7 +31,7 @@ class AuthServiceProvider extends ServiceProvider
 
 		Auth::provider('db', function ($app) {
             return new DbUserProvider(
-				$app->make(AuthRepository::class)
+				$app->make(UsersRepository::class)
 			);
         });
 

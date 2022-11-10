@@ -4,15 +4,15 @@ namespace App\Services\Auth;
 
 use Illuminate\Contracts\Auth\UserProvider as BaseUserProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
-use App\Repositories\AuthRepository;
+use App\Repositories\UsersRepository;
 
 class DbUserProvider implements BaseUserProvider
 {
-	private AuthRepository $authRepo;
+	private UsersRepository $usersRepo;
 
-	public function __construct(AuthRepository $authRepo)
+	public function __construct(UsersRepository $usersRepo)
 	{
-		$this->authRepo = $authRepo;
+		$this->usersRepo = $usersRepo;
 	}
 
     /**
@@ -23,7 +23,7 @@ class DbUserProvider implements BaseUserProvider
      */
 	public function retrieveById($identifier):?Authenticatable
 	{
-		return $this->authRepo->getUserByUsername($identifier);
+		return $this->usersRepo->getUserByUsername($identifier, true);
 	}
 
     /**
