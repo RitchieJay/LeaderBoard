@@ -31,4 +31,13 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+	'auth' => [
+		'azure' => [
+			'client_id' => env('AZURE_AUTH_CLIENT_ID'),
+			'tenant_id' => env('AZURE_AUTH_TENANT_ID'),
+			'authority' => env('AZURE_AUTH_AUTHORITY'),
+			'discovery_url' => env('AZURE_AUTH_DISCOVERY_URL')
+		]
+	]
+
 ];

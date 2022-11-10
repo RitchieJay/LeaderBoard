@@ -1,23 +1,31 @@
+import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
+import LoginCta from "../components/login-cta";
 import Navbar from "../components/navbar";
 import PageHeader from "../components/page-header";
+import { useFetchAccessToken, useIsAuthenticated } from "../contexts/auth";
 
 const navigation = [
     { name: "Leaderboards", to: "/admin/leaderboards" },
     { name: "Users", to: "/admin/users" },
 ];
 
-const userNavigation = [{ name: "Sign out", to: "#" }];
-
 const AdminLayout = () => {
+    const isAuthenticated = useIsAuthenticated();
+    const fetchAccessToken = useFetchAccessToken();
+
+    useEffect(() => {
+        fetchAccessToken();
+    }, [fetchAccessToken]);
+
     return (
         <>
-            <Navbar navigation={navigation} userNavigation={userNavigation} />
+            <Navbar navigation={isAuthenticated ? navigation : []} />
             <PageHeader />
 
             <main>
                 <div className="mx-auto max-w-7xl p-4 sm:p-6 lg:px-8">
-                    <Outlet />
+                    {isAuthenticated ? <Outlet /> : <LoginCta />}
                 </div>
             </main>
         </>

@@ -7,7 +7,7 @@ const user = {
     name: "Dan Crowe",
 };
 
-const Navbar = ({ navigation, userNavigation, className }) => (
+const Navbar = ({ navigation, className }) => (
     <nav className={classNames("bg-brand-600", className)}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex h-16 items-center justify-between space-x-2">
@@ -49,12 +49,6 @@ const Navbar = ({ navigation, userNavigation, className }) => (
 
 Navbar.propTypes = {
     navigation: PropTypes.arrayOf(
-        PropTypes.shape({
-            name: PropTypes.string.isRequired,
-            to: PropTypes.string.isRequired,
-        })
-    ).isRequired,
-    userNavigation: PropTypes.arrayOf(
         PropTypes.shape({
             name: PropTypes.string.isRequired,
             to: PropTypes.string.isRequired,
