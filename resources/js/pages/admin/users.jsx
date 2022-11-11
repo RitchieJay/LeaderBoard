@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import { useNavigationContext } from "../../contexts/navigation";
+import { usePage } from "../../contexts/page";
 
 const AdminUsersPage = () => {
-    const { setPageTitle } = useNavigationContext();
+    const { setPageTitle } = usePage();
 
     useEffect(() => {
         setPageTitle("Users");

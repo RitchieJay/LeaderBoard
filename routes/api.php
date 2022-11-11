@@ -17,6 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware("auth")->group(function ()
 {
 	Route::get("/me", function (Request $request) {
-		dd($request->user());
+		return response()->json($request->user());
 	});
 });

@@ -1,14 +1,14 @@
 import { createContext, useContext, useState } from "react";
 import PropTypes from "prop-types";
 
-export const NavigationContext = createContext({
+export const PageContext = createContext({
     pageTitle: null,
     setPageTitle: () => {},
 });
 
-export const useNavigationContext = () => useContext(NavigationContext);
+export const usePage = () => useContext(PageContext);
 
-export const NavigationProvider = ({ children }) => {
+export const PageProvider = ({ children }) => {
     const [pageTitle, setPageTitle] = useState(null);
 
     const setPageAndDocumentTitle = (newPageTitle) => {
@@ -17,17 +17,17 @@ export const NavigationProvider = ({ children }) => {
     };
 
     return (
-        <NavigationContext.Provider
+        <PageContext.Provider
             value={{
                 pageTitle,
                 setPageTitle: setPageAndDocumentTitle,
             }}
         >
             {children}
-        </NavigationContext.Provider>
+        </PageContext.Provider>
     );
 };
 
-NavigationProvider.propTypes = {
+PageProvider.propTypes = {
     children: PropTypes.node,
 };

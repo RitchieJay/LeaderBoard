@@ -1,10 +1,10 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
-import { useNavigationContext } from "../contexts/navigation";
+import { usePage } from "../contexts/page";
 import Heading from "./heading";
 
 const PageHeader = ({ className, ...rest }) => {
-    const { pageTitle } = useNavigationContext();
+    const { pageTitle } = usePage();
 
     return (
         <header className={classNames("bg-white shadow-sm", className)} {...rest}>

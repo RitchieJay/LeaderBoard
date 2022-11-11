@@ -13,7 +13,3 @@ export const msalConfig = {
 export const loginRequest = {
     scopes: [`${import.meta.env.VITE_AZURE_AUTH_CLIENT_ID}/.default`],
 };
-
-export const graphConfig = {
-    graphMeEndpoint: "https://graph.microsoft.com/v1.0/me",
-};

@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import LoginCta from "../components/login-cta";
 import Navbar from "../components/navbar";
 import PageHeader from "../components/page-header";
-import { useFetchAccessToken, useIsAuthenticated } from "../contexts/auth";
+import { useIsAuthenticated } from "../contexts/auth";
 
 const navigation = [
     { name: "Leaderboards", to: "/admin/leaderboards" },
@@ -12,11 +12,6 @@ const navigation = [
 
 const AdminLayout = () => {
     const isAuthenticated = useIsAuthenticated();
-    const fetchAccessToken = useFetchAccessToken();
-
-    useEffect(() => {
-        fetchAccessToken();
-    }, [fetchAccessToken]);
 
     return (
         <>

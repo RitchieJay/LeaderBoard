@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useRouteError } from "react-router-dom";
 import Heading from "../components/heading";
-import { useNavigationContext } from "../contexts/navigation";
+import { usePage } from "../contexts/page";
 
 const ErrorPage = () => {
-    const { setPageTitle } = useNavigationContext();
+    const { setPageTitle } = usePage();
     const error = useRouteError();
 
     useEffect(() => {
