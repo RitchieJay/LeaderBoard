@@ -20,7 +20,6 @@ const router = createBrowserRouter([
         path: "/admin",
         element: <AdminLayout />,
         errorElement: <ErrorPage />,
-        // TODO - move auth to loader???
         children: [
             {
                 index: true,
