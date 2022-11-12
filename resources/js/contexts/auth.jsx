@@ -1,48 +1,79 @@
-import { useIsAuthenticated as msalUseIsAuthenticated } from "@azure/msal-react";
+import { createContext, useCallback, useContext, useState } from "react";
+import PropTypes from "prop-types";
+import { useAccount, useMsal, useIsAuthenticated as useMsalIsAuthenticated } from "@azure/msal-react";
 import { loginRequest } from "../auth-config";
 
-export const login = async (msalInstance) => {
-    // Try logging in via redirect
-    try {
-        return await msalInstance.loginRedirect(loginRequest);
-    } catch (e) {
-        console.error(e);
-    }
+export const AuthContext = createContext({
+    accessToken: null,
+    setAccessToken: () => {},
+});
+
+export const useAuth = () => useContext(AuthContext);
+
+export const useIsAuthenticated = () => {
+    const msalIsAuthenticated = useMsalIsAuthenticated();
+    const { accessToken } = useAuth();
+
+    return msalIsAuthenticated && !!accessToken;
 };
 
-export const getAuthAccessToken = async (msalInstance, accounts) => {
-    // Ensure we have an active account
-    if (accounts && accounts.length > 0) {
-        // Build the request
-        const request = {
-            ...loginRequest,
-            account: accounts[0],
-        };
+export const useLogin = () => {
+    const { instance: msalInstance } = useMsal();
 
-        // Try silently acquiring an access token
+    return useCallback(async () => {
         try {
-            const response = await msalInstance.acquireTokenSilent(request);
-            if (response.accessToken) {
-                return response.accessToken;
-            }
+            // Try logging in via redirect
+            return await msalInstance.loginRedirect(loginRequest);
         } catch (e) {
-            // Silently fall through
             console.error(e);
         }
-
-        // Try acquiring an access token via redirect
-        try {
-            const response = await msalInstance.acquireTokenRedirect(request);
-            if (response.accessToken) {
-                return response.accessToken;
-            }
-        } catch (e) {
-            // Silently fall through
-            console.error(e);
-        }
-    }
-
-    return null;
+    }, [msalInstance]);
 };
 
-export const useIsAuthenticated = () => msalUseIsAuthenticated();
+export const useAcquireAccessToken = () => {
+    const { instance: msalInstance, accounts } = useMsal();
+    const account = useAccount(accounts[0] || {});
+    const { setAccessToken } = useAuth();
+
+    return useCallback(async () => {
+        // Ensure we have an account
+        if (account) {
+            // Build the token request
+            const request = {
+                ...loginRequest,
+                account,
+            };
+
+            try {
+                // Request the token silently
+                const authResult = await msalInstance.acquireTokenSilent(request);
+                setAccessToken(authResult.accessToken);
+                return authResult.accessToken;
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        setAccessToken(null);
+        return null;
+    }, [msalInstance, account, setAccessToken]);
+};
+
+export const AuthProvider = ({ children }) => {
+    const [accessToken, setAccessToken] = useState(null);
+
+    return (
+        <AuthContext.Provider
+            value={{
+                accessToken,
+                setAccessToken,
+            }}
+        >
+            {children}
+        </AuthContext.Provider>
+    );
+};
+
+AuthProvider.propTypes = {
+    children: PropTypes.node,
+};

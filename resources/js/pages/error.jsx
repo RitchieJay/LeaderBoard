@@ -25,14 +25,6 @@ const ErrorPage = () => {
                             </Heading>
                             <p className="text-gray-500">Please check the URL in the address bar and try again.</p>
                         </div>
-                        {/*
-						TODO - Can we send people anywhere from here? Admins to /admin maybe?
-                        <div className="mt-10 sm:border-l sm:border-transparent sm:pl-6">
-                            <Button color="brand" to="/">
-                                Back to safety
-                            </Button>
-                        </div>
-						*/}
                     </div>
                 </main>
             </div>

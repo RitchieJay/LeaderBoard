@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import LoginCta from "../components/login-cta";
 import Navbar from "../components/navbar";
 import PageHeader from "../components/page-header";
-import { useIsAuthenticated } from "../contexts/auth";
+import { useAcquireAccessToken, useIsAuthenticated } from "../contexts/auth";
 
 const navigation = [
     { name: "Leaderboards", to: "/admin/leaderboards" },
@@ -12,6 +12,14 @@ const navigation = [
 
 const AdminLayout = () => {
     const isAuthenticated = useIsAuthenticated();
+    const acquireAccessToken = useAcquireAccessToken();
+
+    // Acquire an access token
+    useEffect(() => {
+        (async () => {
+            await acquireAccessToken();
+        })();
+    }, [acquireAccessToken]);
 
     return (
         <>

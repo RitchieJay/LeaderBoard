@@ -8,6 +8,7 @@ import { MsalProvider } from "@azure/msal-react";
 import { msalConfig } from "./auth-config";
 import { PageProvider } from "./contexts/page";
 import { AxiosProvider } from "./contexts/axios";
+import { AuthProvider } from "./contexts/auth";
 import router from "./routes";
 import "../css/app.css";
 
@@ -22,14 +23,16 @@ const root = createRoot(document.getElementById("app"));
 root.render(
     <React.StrictMode>
         <MsalProvider instance={msalInstance}>
-            <AxiosProvider>
-                <QueryClientProvider client={queryClient}>
-                    <PageProvider>
-                        <RouterProvider router={router} />
-                    </PageProvider>
-                    <ReactQueryDevtools initialIsOpen={false} />
-                </QueryClientProvider>
-            </AxiosProvider>
+            <AuthProvider>
+                <AxiosProvider>
+                    <QueryClientProvider client={queryClient}>
+                        <PageProvider>
+                            <RouterProvider router={router} />
+                        </PageProvider>
+                        <ReactQueryDevtools initialIsOpen={false} />
+                    </QueryClientProvider>
+                </AxiosProvider>
+            </AuthProvider>
         </MsalProvider>
     </React.StrictMode>
 );

@@ -1,10 +1,9 @@
 import Heading from "./heading";
 import Button from "./button";
-import { login } from "../contexts/auth";
-import { useMsal } from "@azure/msal-react";
+import { useLogin } from "../contexts/auth";
 
 const LoginCta = () => {
-    const { instance: msalInstance } = useMsal();
+    const handleLogin = useLogin();
 
     return (
         <div className="h-full w-full rounded-xl border bg-white p-8 text-center sm:p-10">
@@ -12,7 +11,7 @@ const LoginCta = () => {
                 You're not logged in right now.
             </Heading>
             <p className="mb-6 text-gray-500">Login via the button below to access admin features.</p>
-            <Button as="button" type="button" color="brand" onClick={() => login(msalInstance)}>
+            <Button as="button" type="button" color="brand" onClick={() => handleLogin()}>
                 Login with Microsoft
             </Button>
         </div>
