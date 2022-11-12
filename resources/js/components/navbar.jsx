@@ -1,9 +1,9 @@
-import PropTypes from "prop-types";
 import classNames from "classnames";
-import Logo from "./logo";
-import { NavLink } from "react-router-dom";
+import PropTypes from "prop-types";
 import { useMemo } from "react";
+import { NavLink } from "react-router-dom";
 import { useGetMe } from "../api/users";
+import Logo from "./logo";
 
 const Navbar = ({ navigation, className }) => {
     const { data: user } = useGetMe();

@@ -1,8 +1,8 @@
-import { useMsal } from "@azure/msal-react";
-import Heading from "./heading";
-import Button from "./button";
-import { useLogin } from "../contexts/auth";
 import { InteractionType } from "@azure/msal-browser";
+import { useMsal } from "@azure/msal-react";
+import { useLogin } from "../contexts/auth";
+import Button from "./button";
+import Heading from "./heading";
 
 const LoginCta = () => {
     const { inProgress } = useMsal();

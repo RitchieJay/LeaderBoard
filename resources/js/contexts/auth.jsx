@@ -1,6 +1,6 @@
-import { createContext, useCallback, useContext, useState } from "react";
+import { useAccount, useIsAuthenticated as useMsalIsAuthenticated, useMsal } from "@azure/msal-react";
 import PropTypes from "prop-types";
-import { useAccount, useMsal, useIsAuthenticated as useMsalIsAuthenticated } from "@azure/msal-react";
+import { createContext, useCallback, useContext, useState } from "react";
 import { loginRequest } from "../auth-config";
 
 export const AuthContext = createContext({

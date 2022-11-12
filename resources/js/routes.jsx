@@ -1,9 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
 import AdminLayout from "./layouts/admin";
-import ErrorPage from "./pages/error";
 import AdminHomePage from "./pages/admin/home";
 import AdminLeaderboardsPage from "./pages/admin/leaderboards";
 import AdminUsersPage from "./pages/admin/users";
+import ErrorPage from "./pages/error";
 
 const router = createBrowserRouter([
     /*

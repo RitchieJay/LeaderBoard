@@ -1,6 +1,6 @@
-import { createContext, useContext } from "react";
-import PropTypes from "prop-types";
 import axios from "axios";
+import PropTypes from "prop-types";
+import { createContext, useContext } from "react";
 
 const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
