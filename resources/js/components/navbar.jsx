@@ -1,12 +1,13 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { useMemo } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useGetMe } from "../api/users";
 import Logo from "./logo";
+import Spinner from "./spinner";
 
 const Navbar = ({ navigation, className }) => {
-    const { data: user } = useGetMe();
+    const { data: user, isFetching: isFetchingUser } = useGetMe();
 
     const userRole = useMemo(() => {
         if (!user) {
@@ -22,7 +23,9 @@ const Navbar = ({ navigation, className }) => {
                 <div className="flex h-16 items-center justify-between space-x-2">
                     {/* begin logo / navigation */}
                     <div className="flex flex-1 items-center justify-between space-x-10 sm:justify-start">
-                        <Logo className="flex-shrink-0" color="white" />
+                        <Link to="/admin">
+                            <Logo color="white" withText={true} />
+                        </Link>
                         <div className="flex items-center space-x-2">
                             {navigation.map((item) => (
                                 <NavLink
@@ -45,7 +48,9 @@ const Navbar = ({ navigation, className }) => {
                     {/* begin user */}
                     <div className="hidden flex-col items-end justify-center text-right sm:flex">
                         <span className="space-x-1 text-sm font-medium">
-                            <span className="text-brand-200">{userRole}</span>
+                            <span className="text-brand-200">
+                                {isFetchingUser ? <Spinner className="h-5 w-5" /> : userRole}
+                            </span>
                             {user?.displayName && (
                                 <>
                                     <span className="text-xs text-brand-200">/</span>

@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import AdminLayout, { loader as adminLoader } from "./layouts/admin";
+import AdminLayout from "./layouts/admin";
 import AdminHomePage from "./pages/admin/home";
 import AdminLeaderboardsPage from "./pages/admin/leaderboards";
 import AdminUsersPage from "./pages/admin/users";
@@ -19,7 +19,6 @@ const router = createBrowserRouter([
     {
         path: "/admin",
         element: <AdminLayout />,
-        loader: adminLoader,
         errorElement: <ErrorPage />,
         children: [
             {

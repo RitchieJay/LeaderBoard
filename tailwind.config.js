@@ -12,6 +12,9 @@ module.exports = {
             fontFamily: {
                 sans: ["Poppins", defaultTheme.fontFamily.sans],
             },
+            animation: {
+                "spin-slow": "spin 2.5s linear infinite;",
+            },
         },
     },
     plugins: [],
