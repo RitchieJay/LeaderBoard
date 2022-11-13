@@ -17,3 +17,19 @@ export const useGetMe = () => {
         enabled: !!accessToken,
     });
 };
+
+export const useGetUsers = () => {
+    const axios = useAxios();
+    const { accessToken } = useAuth();
+
+    return useQuery({
+        queryKey: ["users"],
+        queryFn: async () => {
+            const response = await axios.get("users", {
+                headers: { Authorization: `Bearer ${accessToken}` },
+            });
+            return response.data;
+        },
+        enabled: !!accessToken,
+    });
+};

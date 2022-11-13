@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,7 +16,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware("auth")->group(function ()
 {
-	Route::get("/me", function (Request $request) {
-		return response()->json($request->user());
+	Route::get("/me", [UsersController::class, 'getMe']);
+
+	Route::prefix('/users')->group(function ()
+	{
+		Route::get('/', [UsersController::class, 'getUsers']);
 	});
 });

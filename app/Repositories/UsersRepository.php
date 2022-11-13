@@ -24,4 +24,15 @@ class UsersRepository
 
 		return new User($results[0], $includePrivateFields);
 	}
+
+	public function getUsers(bool $includePrivateFields = false): array
+	{
+		// Fetch the data
+		$results = DB::select($this->sqlFromFile("users/get-users.sql"));
+
+		return array_map(
+			fn ($row) => new User($row, $includePrivateFields),
+			$results
+		);
+	}
 }
