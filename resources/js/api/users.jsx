@@ -33,3 +33,19 @@ export const useGetUsers = () => {
         enabled: !!accessToken,
     });
 };
+
+export const useGetUserByDisplayName = (displayName) => {
+    const axios = useAxios();
+    const { accessToken } = useAuth();
+
+    return useQuery({
+        queryKey: ["users", displayName],
+        queryFn: async () => {
+            const response = await axios.get(`users/${displayName}`, {
+                headers: { Authorization: `Bearer ${accessToken}` },
+            });
+            return response.data;
+        },
+        enabled: !!accessToken,
+    });
+};

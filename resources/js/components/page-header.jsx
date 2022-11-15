@@ -9,7 +9,7 @@ const PageHeader = ({ className, ...rest }) => {
 
     return (
         <header className={classNames("bg-white shadow-sm", className)} {...rest}>
-            <div className="mx-auto flex h-14 max-w-7xl flex-row items-center justify-between px-4 sm:h-16 sm:px-6 lg:px-8">
+            <div className="mx-auto flex h-14 max-w-7xl flex-row items-center justify-between space-x-4 px-4 sm:h-16 sm:px-6 lg:px-8">
                 <div>
                     {pageTitle && (
                         <Heading as="h1" level={2}>

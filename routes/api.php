@@ -18,8 +18,9 @@ Route::middleware("auth")->group(function ()
 {
 	Route::get("/me", [UsersController::class, 'getMe']);
 
-	Route::prefix('/users')->group(function ()
+	Route::prefix('/users')->middleware('api.ensure-user-is-admin')->group(function ()
 	{
 		Route::get('/', [UsersController::class, 'getUsers']);
+		Route::get('/{displayName}', [UsersController::class, 'getUserByDisplayName']);
 	});
 });

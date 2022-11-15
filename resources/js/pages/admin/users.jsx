@@ -1,7 +1,9 @@
+import { PlusCircleIcon } from "@heroicons/react/20/solid";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useEffect, useMemo } from "react";
 import { useGetUsers } from "../../api/users";
 import Badge from "../../components/badge";
+import Button from "../../components/button";
 import Link from "../../components/link";
 import Spinner from "../../components/spinner";
 import Table from "../../components/table";
@@ -57,6 +59,10 @@ const usersTableColumns = [
         header: "Role",
         sortDescFirst: false,
         cell: ({ getValue }) => (getValue() ? <Badge color="brand">Admin</Badge> : <Badge color="default">User</Badge>),
+        meta: {
+            cell: { wrapperClassName: "text-center" },
+            header: { wrapperClassName: "justify-center" },
+        },
     }),
 ];
 
@@ -91,7 +97,20 @@ const AdminUsersPage = () => {
 
     return (
         <>
-            {activePageTab === "active" && <Table data={activeUsers} columns={usersTableColumns} />}
+            {activePageTab === "active" && (
+                <Table
+                    data={activeUsers}
+                    columns={usersTableColumns}
+                    headerProps={{
+                        rightPanelContent: (
+                            <Button color="brand" to="/admin/users/create">
+                                <PlusCircleIcon className="h-5 w-5" />
+                                <span className="ml-1.5 hidden sm:inline">New User</span>
+                            </Button>
+                        ),
+                    }}
+                />
+            )}
             {activePageTab === "inactive" && <Table data={inactiveUsers} columns={usersTableColumns} />}
         </>
     );

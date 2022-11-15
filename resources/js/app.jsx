@@ -16,7 +16,14 @@ import router from "./routes";
 const msalInstance = new PublicClientApplication(msalConfig);
 
 // Create the HTTP query client
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            retry: 1,
+            retryDelay: 500,
+        },
+    },
+});
 
 // Render the app
 const root = createRoot(document.getElementById("app"));

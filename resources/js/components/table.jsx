@@ -28,9 +28,13 @@ const renderHeader = (header) => {
             )}
         >
             <div
-                className={classNames("flex w-fit flex-row items-center p-3", {
-                    "cursor-pointer select-none": isSortable,
-                })}
+                className={classNames(
+                    "flex flex-row items-center p-3",
+                    {
+                        "cursor-pointer select-none": isSortable,
+                    },
+                    header.column.columnDef?.meta?.header?.wrapperClassName
+                )}
                 onClick={header.column.getToggleSortingHandler()}
             >
                 {renderHeaderValue(header)}
@@ -47,7 +51,7 @@ const renderHeader = (header) => {
 };
 
 const renderCell = (cell) => {
-    const cellWrapperClasses = "p-3";
+    const cellWrapperClasses = classNames("p-3", cell.column.columnDef?.meta?.cell?.wrapperClassName);
     const cellValue = renderCellValue(cell);
 
     return (
@@ -67,7 +71,7 @@ const renderCell = (cell) => {
     );
 };
 
-const Table = ({ data, columns }) => {
+const Table = ({ data, columns, headerProps, footerProps }) => {
     const [globalFilter, setGlobalFilter] = useState("");
     const [sorting, setSorting] = useState([]);
 
@@ -95,6 +99,7 @@ const Table = ({ data, columns }) => {
     return (
         <>
             <TableHeader
+                {...headerProps}
                 globalFilterProps={{
                     placeholder: "Search users...",
                 }}
@@ -116,6 +121,7 @@ const Table = ({ data, columns }) => {
                 </table>
             </div>
             <TableFooter
+                {...footerProps}
                 currentPageIndex={pagination.pageIndex}
                 pageSize={pagination.pageSize}
                 totalPages={table.getPageCount()}
@@ -131,6 +137,8 @@ const Table = ({ data, columns }) => {
 Table.propTypes = {
     data: PropTypes.array,
     columns: PropTypes.array.isRequired,
+    headerProps: PropTypes.object,
+    footerProps: PropTypes.object,
 };
 
 export default Table;

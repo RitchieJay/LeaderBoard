@@ -29,4 +29,20 @@ class UsersController extends Controller
 
 		return response()->json($users);
 	}
+
+	public function getUserByDisplayName(Request $request, string $displayName): JsonResponse
+	{
+		// Fetch the data
+		$user = $this->usersRepo->getUserByDisplayName(
+			$displayName,
+			!!$request->user()
+		);
+
+		// Handle errors
+		if (!isset($user)) {
+			abort(404, "User not found");
+		}
+
+		return response()->json($user);
+	}
 }

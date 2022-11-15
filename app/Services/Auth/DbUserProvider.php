@@ -23,7 +23,13 @@ class DbUserProvider implements BaseUserProvider
      */
 	public function retrieveById($identifier):?Authenticatable
 	{
-		return $this->usersRepo->getUserByUsername($identifier, true);
+		$user = $this->usersRepo->getUserByUsername($identifier, true);
+
+		if ($user->isActive) {
+			return $user;
+		}
+
+		return null;
 	}
 
     /**

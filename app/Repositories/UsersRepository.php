@@ -35,4 +35,19 @@ class UsersRepository
 			$results
 		);
 	}
+
+	public function getUserByDisplayName(string $displayName, bool $includePrivateFields = false): ?User
+	{
+		// Fetch the data
+		$results = DB::select($this->sqlFromFile("users/get-user-by-display-name.sql"), [
+			":display_name" => $displayName
+		]);
+
+		// Fail if empty
+		if (empty($results)) {
+			return null;
+		}
+
+		return new User($results[0], $includePrivateFields);
+	}
 }
