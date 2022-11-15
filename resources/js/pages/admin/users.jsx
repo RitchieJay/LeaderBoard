@@ -48,7 +48,7 @@ const AdminUsersPage = () => {
     if (isLoadingUsers && activeUsers.length < 1) {
         return (
             <div className="flex flex-row items-center justify-center space-x-2">
-                <Spinner className="h-6 w-6 text-gray-600" />
+                <Spinner className="h-5 w-5 text-gray-600" />
                 <p className="text-gray-600">Loading...</p>
             </div>
         );

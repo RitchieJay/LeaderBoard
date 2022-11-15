@@ -1,4 +1,4 @@
-import { TrophyIcon } from "@heroicons/react/24/solid";
+import { TrophyIcon } from "@heroicons/react/20/solid";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 

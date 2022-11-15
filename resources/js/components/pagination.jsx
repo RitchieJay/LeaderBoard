@@ -3,7 +3,7 @@ import {
     ChevronDoubleRightIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
-} from "@heroicons/react/24/solid";
+} from "@heroicons/react/20/solid";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { useCallback } from "react";

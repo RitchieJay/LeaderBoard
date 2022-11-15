@@ -1,3 +1,4 @@
+import { ChevronDownIcon, ChevronUpDownIcon, ChevronUpIcon } from "@heroicons/react/20/solid";
 import {
     flexRender,
     getCoreRowModel,
@@ -15,12 +16,14 @@ import TableHeader from "./table-header";
 
 const Table = ({ data, columns }) => {
     const [globalFilter, setGlobalFilter] = useState("");
+    const [sorting, setSorting] = useState([]);
 
     const table = useReactTable({
         data,
         columns,
         state: {
             globalFilter,
+            sorting,
         },
         filterFns: {
             fuzzy: fuzzyFilter,
@@ -31,6 +34,7 @@ const Table = ({ data, columns }) => {
         getPaginationRowModel: getPaginationRowModel(),
         onGlobalFilterChange: setGlobalFilter,
         globalFilterFn: fuzzyFilter,
+        onSortingChange: setSorting,
     });
 
     const pagination = table.getState().pagination;
@@ -55,11 +59,25 @@ const Table = ({ data, columns }) => {
                                         colSpan={header.colSpan}
                                         scope="col"
                                         className={classNames(
-                                            "p-3 text-left text-sm font-bold text-gray-900",
+                                            "text-left text-sm font-bold text-gray-900",
                                             header.column.columnDef?.meta?.cellClassName
                                         )}
                                     >
-                                        {flexRender(header.column.columnDef.header, header.getContext())}
+                                        <div
+                                            className="flex w-fit cursor-pointer select-none flex-row items-center p-3"
+                                            onClick={header.column.getToggleSortingHandler()}
+                                        >
+                                            {flexRender(header.column.columnDef.header, header.getContext())}
+                                            {header.column.getIsSorted() === "asc" && (
+                                                <ChevronUpIcon className="ml-2 h-4 w-4" />
+                                            )}
+                                            {header.column.getIsSorted() === "desc" && (
+                                                <ChevronDownIcon className="ml-2 h-4 w-4" />
+                                            )}
+                                            {!header.column.getIsSorted() && (
+                                                <ChevronUpDownIcon className="ml-2 h-4 w-4" />
+                                            )}
+                                        </div>
                                     </th>
                                 ))}
                             </tr>
