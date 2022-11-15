@@ -4,12 +4,15 @@ import Heading from "../components/heading";
 import { usePage } from "../contexts/page";
 
 const ErrorPage = () => {
-    const { setPageTitle } = usePage();
+    const { setPageTitle, setPageTabs, setActivePageTab } = usePage();
     const error = useRouteError();
 
+    // Configure the page
     useEffect(() => {
         setPageTitle("Error");
-    }, [setPageTitle]);
+        setPageTabs([]);
+        setActivePageTab(null);
+    }, [setPageTitle, setPageTabs, setActivePageTab]);
 
     return (
         <div className="min-h-full px-4 py-16 sm:grid sm:place-items-center sm:px-6 sm:py-24 lg:px-8">
