@@ -46,18 +46,18 @@ const Navbar = ({ navigation, className }) => {
                     {/* end logo / navigation */}
 
                     {/* begin user */}
-                    <div className="hidden flex-col items-end justify-center text-right sm:flex">
-                        <span className="space-x-1 text-sm font-medium">
-                            <span className="text-brand-200">
-                                {isFetchingUser ? <Spinner className="h-5 w-5" /> : userRole}
-                            </span>
-                            {user?.displayName && (
-                                <>
-                                    <span className="text-xs text-brand-200">/</span>
-                                    <span className="text-white">{user.displayName}</span>
-                                </>
-                            )}
+                    <div className="hidden flex-row items-center justify-end space-x-1 text-right text-sm font-medium sm:flex">
+                        <span className="text-brand-200">
+                            {!user && isFetchingUser ? <Spinner className="h-5 w-5" /> : userRole}
                         </span>
+                        {user?.displayName && (
+                            <>
+                                <span className="text-xs text-brand-200">/</span>
+                                <span className="text-white">
+                                    {user.privateForename} {user.privateSurname}
+                                </span>
+                            </>
+                        )}
                     </div>
                     {/* end user */}
                 </div>

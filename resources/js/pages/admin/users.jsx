@@ -9,8 +9,22 @@ import { usePage } from "../../contexts/page";
 const columnHelper = createColumnHelper();
 const usersTableColumns = [
     columnHelper.accessor("displayName", { id: "displayName", header: "Username" }),
-    columnHelper.accessor("privateForename", { id: "forename", header: "Forename" }),
-    columnHelper.accessor("privateSurname", { id: "surname", header: "Surname" }),
+    columnHelper.accessor((row) => `${row.privateForename} ${row.privateSurname}`, {
+        id: "name",
+        header: "Name",
+        meta: {
+            cellClassName: "hidden md:table-cell",
+            headerClassName: "hidden md:table-cell",
+        },
+    }),
+    columnHelper.accessor("privateUsername", {
+        id: "email",
+        header: "Email",
+        meta: {
+            cellClassName: "hidden md:table-cell",
+            headerClassName: "hidden md:table-cell",
+        },
+    }),
     columnHelper.accessor("isAdmin", {
         id: "role",
         header: "Role",
