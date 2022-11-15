@@ -9,22 +9,20 @@ const TableHeader = ({
     onGlobalFilterChange,
     rightPanelContent,
     ...rest
-}) => {
-    return (
-        <div {...rest} className={classNames("mb-4 flex flex-row items-center justify-between space-x-3", className)}>
-            <div className="flex-1 sm:w-80 sm:flex-initial lg:w-96">
-                <Input
-                    type="text"
-                    placeholder="Search..."
-                    value={globalFilter}
-                    onChange={onGlobalFilterChange}
-                    {...globalFilterProps}
-                />
-            </div>
-            {rightPanelContent}
+}) => (
+    <div {...rest} className={classNames("mb-4 flex flex-row items-center justify-between space-x-3", className)}>
+        <div className="flex-1 sm:w-80 sm:flex-initial lg:w-96">
+            <Input
+                type="text"
+                placeholder="Search..."
+                value={globalFilter}
+                onChange={onGlobalFilterChange}
+                {...globalFilterProps}
+            />
         </div>
-    );
-};
+        {rightPanelContent}
+    </div>
+);
 
 TableHeader.propTypes = {
     className: PropTypes.string,
