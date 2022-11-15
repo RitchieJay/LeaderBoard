@@ -1,5 +1,4 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import { data } from "autoprefixer";
 import { useEffect, useMemo } from "react";
 import { useGetUsers } from "../../api/users";
 import Badge from "../../components/badge";
@@ -32,7 +31,7 @@ const AdminUsersPage = () => {
     }, [users]);
 
     // Loading state
-    if (isLoadingUsers && data.length < 1) {
+    if (isLoadingUsers && activeUsers.length < 1) {
         return (
             <div className="flex flex-row items-center justify-center space-x-2">
                 <Spinner className="h-6 w-6 text-gray-600" />
