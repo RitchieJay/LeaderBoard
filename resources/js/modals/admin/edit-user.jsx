@@ -13,7 +13,7 @@ import Button from "../../components/button";
 import Combobox from "../../components/combobox";
 import Input from "../../components/input";
 import Modal, { ModalTitle } from "../../components/modal";
-import Spinner from "../../components/spinner";
+import PageLoader from "../../components/page-loader";
 import Toggle from "../../components/toggle";
 
 const resetFormDefaultValues = (user) => ({
@@ -157,10 +157,7 @@ const AdminEditUserModal = ({ displayName, onClose, onCloseFinish, ...rest }) =>
         <Modal onClose={onClose} onCloseFinish={handleModalCloseFinish} {...rest}>
             <ModalTitle>{displayName ? "Edit" : "Create"} User</ModalTitle>
             {(displayName && !user) || (user && isLoadingPeople && people.length < 1) ? (
-                <div className="flex flex-row items-center justify-center space-x-2">
-                    <Spinner className="h-5 w-5 text-gray-600" />
-                    <p className="text-gray-600">Loading...</p>
-                </div>
+                <PageLoader />
             ) : (
                 <form
                     className="flex flex-col space-y-4 sm:space-y-6 lg:space-y-8"

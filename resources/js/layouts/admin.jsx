@@ -6,7 +6,7 @@ import { useGetMe } from "../api/users";
 import LoginCta from "../components/login-cta";
 import Navbar from "../components/navbar";
 import PageHeader from "../components/page-header";
-import Spinner from "../components/spinner";
+import PageLoader from "../components/page-loader";
 import { useAccessToken, useAuth, useIsAuthenticated } from "../contexts/auth";
 
 export const navigation = [
@@ -38,10 +38,7 @@ const AdminLayout = () => {
                     {(!accessToken && accessTokenIsLoading) ||
                     userIsLoading ||
                     msalInProgress !== InteractionType.None ? (
-                        <div className="flex flex-row items-center justify-center space-x-2">
-                            <Spinner className="h-5 w-5 text-gray-600" />
-                            <p className="text-gray-600">Loading...</p>
-                        </div>
+                        <PageLoader />
                     ) : isAuthenticated ? (
                         <Outlet />
                     ) : (

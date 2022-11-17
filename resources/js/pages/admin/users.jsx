@@ -2,7 +2,7 @@ import { PlusCircleIcon } from "@heroicons/react/20/solid";
 import { useEffect, useMemo, useState } from "react";
 import { useGetUsers } from "../../api/users";
 import Button from "../../components/button";
-import Spinner from "../../components/spinner";
+import PageLoader from "../../components/page-loader";
 import Table from "../../components/table";
 import { usePage } from "../../contexts/page";
 import AdminEditUserModal from "../../modals/admin/edit-user";
@@ -44,12 +44,7 @@ const AdminUsersPage = () => {
 
     // Loading state
     if ((isLoadingUsers && activeUsers.length < 1) || !activePageTab) {
-        return (
-            <div className="flex flex-row items-center justify-center space-x-2">
-                <Spinner className="h-5 w-5 text-gray-600" />
-                <p className="text-gray-600">Loading...</p>
-            </div>
-        );
+        return <PageLoader />;
     }
 
     return (
