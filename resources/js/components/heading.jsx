@@ -16,7 +16,8 @@ const Heading = ({ as, level, color = "default", children, className, ...rest })
 
                     // Levels
                     "text-4xl sm:text-5xl": level === 1,
-                    "text-lg": level === 2,
+                    "text-xl sm:text-2xl": level === 2,
+                    "text-base sm:text-lg": level === 3,
                 },
                 className
             )}
@@ -28,7 +29,7 @@ const Heading = ({ as, level, color = "default", children, className, ...rest })
 
 Heading.propTypes = {
     as: PropTypes.elementType,
-    level: PropTypes.oneOf([1, 2]).isRequired,
+    level: PropTypes.oneOf([1, 2, 3]).isRequired,
     color: PropTypes.oneOf(["default", "brand", "white"]),
     children: PropTypes.node,
     className: PropTypes.string,

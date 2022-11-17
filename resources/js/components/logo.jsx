@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 
 const Logo = ({ color = "brand", size = "base", withText = false, className, ...rest }) => (
     <div
+        {...rest}
         className={classNames(
             "flex flex-row items-center justify-start",
             {
@@ -16,7 +17,6 @@ const Logo = ({ color = "brand", size = "base", withText = false, className, ...
             },
             className
         )}
-        {...rest}
     >
         <TrophyIcon
             className={classNames(

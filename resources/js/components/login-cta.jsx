@@ -3,13 +3,12 @@ import { useLogin } from "../contexts/auth";
 import Button from "./button";
 import Heading from "./heading";
 
-const LoginCta = () => {
+const LoginCta = ({ ...rest }) => {
     const [isLoggingIn, setIsLoggingIn] = useState(false);
-
     const login = useLogin();
 
     return (
-        <div className="h-full w-full rounded-xl border bg-white p-8 text-center sm:p-10">
+        <div {...rest} className="h-full w-full rounded-xl border bg-white p-8 text-center sm:p-10">
             <Heading className="mb-2" level={2}>
                 You're not logged in right now.
             </Heading>

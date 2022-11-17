@@ -2,6 +2,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { Fragment } from "react";
+import Heading from "./heading";
 
 const Modal = ({ isOpen, onClose, children, onCloseFinish }) => (
     <Transition.Root afterLeave={onCloseFinish} show={isOpen} as={Fragment}>
@@ -51,11 +52,9 @@ Modal.propTypes = {
 export const ModalTitle = ({ className, children, ...rest }) => (
     <Dialog.Title
         {...rest}
-        as="h3"
-        className={classNames(
-            "mb-6 border-b border-gray-300 pb-2 text-xl font-bold text-gray-900 sm:pb-4 sm:text-2xl",
-            className
-        )}
+        as={Heading}
+        level={2}
+        className={classNames("mb-6 border-b border-gray-300 pb-2 sm:pb-4", className)}
     >
         {children}
     </Dialog.Title>

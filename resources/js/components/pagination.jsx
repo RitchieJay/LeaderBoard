@@ -28,7 +28,11 @@ const Pagination = ({ as: Tag = "nav", currentPageIndex, totalPages, onChange, c
     );
 
     return (
-        <Tag className={classNames("inline-flex -space-x-px rounded-md shadow-sm", className)} aria-label="Pagination">
+        <Tag
+            {...rest}
+            className={classNames("inline-flex -space-x-px rounded-md shadow-sm", className)}
+            aria-label="Pagination"
+        >
             {buttons.map((btn, btnIdx) => (
                 <button
                     key={btn.key}

@@ -13,6 +13,7 @@ const Button = ({
 }) => (
     <Tag
         {...rest}
+        disabled={disabled}
         className={classNames(
             "inline-flex shrink-0 items-center rounded-md border font-medium shadow-sm focus:outline-none",
             {

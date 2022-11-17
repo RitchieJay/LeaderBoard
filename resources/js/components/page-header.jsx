@@ -8,11 +8,11 @@ const PageHeader = ({ className, ...rest }) => {
     const { title, tabs, activeTab, setActiveTab } = usePage();
 
     return (
-        <header className={classNames("bg-white shadow-sm", className)} {...rest}>
+        <header {...rest} className={classNames("bg-white shadow-sm", className)}>
             <div className="mx-auto flex h-14 max-w-7xl flex-row items-center justify-between space-x-4 px-4 sm:h-16 sm:px-6 lg:px-8">
                 <div>
                     {title && (
-                        <Heading as="h1" level={2}>
+                        <Heading as="h1" level={3}>
                             {title}
                         </Heading>
                     )}

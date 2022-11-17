@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { forwardRef } from "react";
 import Label from "./label";
 
-const Toggle = forwardRef(({ className, id, checked, onChange, withLabel, withHelper, ...rest }, ref) => (
+const Toggle = forwardRef(({ id, checked, onChange, withLabel, withHelper, className, ...rest }, ref) => (
     <>
         {withLabel && (
             <Label htmlFor={id} className="mb-2">
@@ -63,13 +63,13 @@ const Toggle = forwardRef(({ className, id, checked, onChange, withLabel, withHe
 ));
 
 Toggle.propTypes = {
-    className: PropTypes.string,
     id: PropTypes.string,
     checked: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
     withLabel: PropTypes.node,
     withHelper: PropTypes.node,
     hasErrors: PropTypes.bool,
+    className: PropTypes.string,
 };
 
 export default Toggle;

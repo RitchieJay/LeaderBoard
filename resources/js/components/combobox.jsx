@@ -8,7 +8,6 @@ import Label from "./label";
 const Combobox = forwardRef(
     (
         {
-            className,
             id,
             value,
             getDisplayValue,
@@ -100,14 +99,13 @@ const Combobox = forwardRef(
 );
 
 Combobox.propTypes = {
-    className: PropTypes.string,
     id: PropTypes.string,
-    options: PropTypes.array,
     value: PropTypes.any,
     getDisplayValue: PropTypes.func.isRequired,
+    options: PropTypes.array,
     getOption: PropTypes.func.isRequired,
     onQueryChange: PropTypes.func.isRequired,
-    onChange: PropTypes.func,
+    onChange: PropTypes.func.isRequired,
     withLabel: PropTypes.node,
     withHelper: PropTypes.node,
     hasErrors: PropTypes.bool,

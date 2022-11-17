@@ -6,23 +6,19 @@ import { useAuth } from "../contexts/auth";
 import Logo from "./logo";
 import Spinner from "./spinner";
 
-const Navbar = ({ navigation, className }) => {
+const Navbar = ({ navigation, className, ...rest }) => {
     const { user, userIsLoading } = useAuth();
 
     const userRole = useMemo(() => {
-        if (!user) {
-            return "Not logged in";
-        }
-
-        return user.isAdmin ? "Admin" : "User";
+        return !user ? "Not logged in" : user.isAdmin ? "Admin" : "User";
     }, [user]);
 
     return (
-        <nav className={classNames("bg-brand-600", className)}>
+        <nav {...rest} className={classNames("bg-brand-600", className)}>
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between space-x-2">
                     {/* begin logo / navigation */}
-                    <div className="flex flex-1 items-center justify-between space-x-10 sm:justify-start">
+                    <div className="flex flex-1 items-center justify-between space-x-4 sm:justify-start sm:space-x-10">
                         <Link
                             to="/admin"
                             className="rounded-sm outline-none outline-2 outline-offset-[6px] focus:outline-white"

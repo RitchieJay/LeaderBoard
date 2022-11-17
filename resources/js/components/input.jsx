@@ -5,7 +5,7 @@ import { forwardRef } from "react";
 import Label from "./label";
 
 const Input = forwardRef(
-    ({ className, id, value, onChange, withLabel, withHelper, hasErrors = false, ...rest }, ref) => (
+    ({ id, value, onChange, withLabel, withHelper, hasErrors = false, className, ...rest }, ref) => (
         <>
             {withLabel && (
                 <Label htmlFor={id} className="mb-2">
@@ -46,13 +46,13 @@ const Input = forwardRef(
 );
 
 Input.propTypes = {
-    className: PropTypes.string,
     id: PropTypes.string,
     value: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     withLabel: PropTypes.node,
     withHelper: PropTypes.node,
     hasErrors: PropTypes.bool,
+    className: PropTypes.string,
 };
 
 export default Input;
