@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import AdminLayout from "./layouts/admin";
-import AdminHomePage from "./pages/admin/home";
+import AdminIndexPage from "./pages/admin/index";
 import AdminLeaderboardsPage from "./pages/admin/leaderboards";
 import AdminUsersPage from "./pages/admin/users";
 import ErrorPage from "./pages/error";
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <AdminHomePage />,
+                element: <AdminIndexPage />,
             },
             {
                 path: "leaderboards",
@@ -32,7 +32,6 @@ const router = createBrowserRouter([
             {
                 path: "users",
                 element: <AdminUsersPage />,
-                children: [],
             },
         ],
     },

@@ -30,9 +30,32 @@ const AdminEditUserModal = ({ displayName, onClose, onCloseFinish, ...rest }) =>
     // Fetch data
     const { data: user = null } = useGetUserByDisplayName(displayName);
     const { data: people = [], isFetching: isLoadingPeople } = useSearchPeople(personQuery);
-    const { mutate: createUser } = useCreateUser();
-    const { mutate: updateUser } = useUpdateUserByDisplayName();
-    const { mutate: archiveUser } = useArchiveUserByDisplayName();
+
+    // Data mutations
+    const { mutate: createUser } = useCreateUser({
+        onSuccess: () => {
+            onClose();
+        },
+        onSettled: () => {
+            setIsPerformingAction(false);
+        },
+    });
+    const { mutate: updateUser } = useUpdateUserByDisplayName({
+        onSuccess: () => {
+            onClose();
+        },
+        onSettled: () => {
+            setIsPerformingAction(false);
+        },
+    });
+    const { mutate: archiveUser } = useArchiveUserByDisplayName({
+        onSuccess: () => {
+            onClose();
+        },
+        onSettled: () => {
+            setIsPerformingAction(false);
+        },
+    });
 
     // Configure the form
     const {
@@ -73,10 +96,8 @@ const AdminEditUserModal = ({ displayName, onClose, onCloseFinish, ...rest }) =>
                 personCode: data.person.personCode,
                 isAdmin: data.isAdmin,
             });
-            setIsPerformingAction(false);
-            onClose();
         },
-        [createUser, onClose]
+        [createUser]
     );
 
     const handleUpdateUser = useCallback(
@@ -88,20 +109,16 @@ const AdminEditUserModal = ({ displayName, onClose, onCloseFinish, ...rest }) =>
                 personCode: data.person.personCode,
                 isAdmin: data.isAdmin,
             });
-            setIsPerformingAction(false);
-            onClose();
         },
-        [user, updateUser, onClose]
+        [user, updateUser]
     );
 
     const handleArchiveUser = useCallback(
         async (userDisplayName) => {
             setIsPerformingAction(true);
             await archiveUser(userDisplayName);
-            setIsPerformingAction(false);
-            onClose();
         },
-        [archiveUser, onClose]
+        [archiveUser]
     );
 
     const handleEnableUser = useCallback(

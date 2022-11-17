@@ -1,20 +1,26 @@
 import { useAccount, useIsAuthenticated as useMsalIsAuthenticated, useMsal } from "@azure/msal-react";
 import PropTypes from "prop-types";
-import { createContext, useCallback, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { loginRequest } from "../auth-config";
 
+const defaultState = {
+    user: null,
+    userIsLoading: false,
+};
+
 export const AuthContext = createContext({
-    accessToken: null,
-    setAccessToken: () => {},
+    ...defaultState,
+    setUser: () => {},
 });
 
 export const useAuth = () => useContext(AuthContext);
 
 export const useIsAuthenticated = () => {
     const msalIsAuthenticated = useMsalIsAuthenticated();
-    const { accessToken } = useAuth();
+    const { accessToken } = useAccessToken();
+    const { user } = useAuth();
 
-    return msalIsAuthenticated && !!accessToken;
+    return useMemo(() => msalIsAuthenticated && !!accessToken && !!user, [msalIsAuthenticated, accessToken, user]);
 };
 
 export const useLogin = () => {
@@ -22,7 +28,6 @@ export const useLogin = () => {
 
     return useCallback(async () => {
         try {
-            // Try logging in via redirect
             return await msalInstance.loginRedirect(loginRequest);
         } catch (e) {
             console.error(e);
@@ -30,43 +35,50 @@ export const useLogin = () => {
     }, [msalInstance]);
 };
 
-export const useAcquireAccessToken = () => {
-    const { instance: msalInstance, accounts } = useMsal();
-    const account = useAccount(accounts[0] || {});
-    const { setAccessToken } = useAuth();
+export const useAccessToken = () => {
+    const { instance: msalInstance, accounts: msalAccounts } = useMsal();
+    const msalAccount = useAccount(msalAccounts[0] || {});
+    const [accessTokenState, setAccessTokenState] = useState({
+        accessToken: null,
+        accessTokenIsLoading: true,
+    });
 
-    return useCallback(async () => {
-        // Ensure we have an account
-        if (account) {
-            // Build the token request
-            const request = {
-                ...loginRequest,
-                account,
-            };
-
+    useEffect(() => {
+        (async () => {
+            // Request the token silently
             try {
-                // Request the token silently
-                const authResult = await msalInstance.acquireTokenSilent(request);
-                setAccessToken(authResult.accessToken);
-                return authResult.accessToken;
+                const { accessToken } = await msalInstance.acquireTokenSilent({
+                    ...loginRequest,
+                    account: msalAccount,
+                });
+                setAccessTokenState({
+                    accessToken,
+                    accessTokenIsLoading: false,
+                });
             } catch (e) {
-                console.error(e);
+                setAccessTokenState({
+                    accessToken: null,
+                    accessTokenIsLoading: false,
+                });
             }
-        }
+        })();
+    }, [msalInstance, msalAccount]);
 
-        setAccessToken(null);
-        return null;
-    }, [msalInstance, account, setAccessToken]);
+    return accessTokenState;
 };
 
 export const AuthProvider = ({ children }) => {
-    const [accessToken, setAccessToken] = useState(null);
+    const [authState, setAuthState] = useState(defaultState);
+
+    const setUser = useCallback((newAuthState) => {
+        setAuthState(newAuthState);
+    }, []);
 
     return (
         <AuthContext.Provider
             value={{
-                accessToken,
-                setAccessToken,
+                ...authState,
+                setUser,
             }}
         >
             {children}

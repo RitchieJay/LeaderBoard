@@ -14,17 +14,19 @@ const pageTabs = [
 ];
 
 const AdminUsersPage = () => {
-    const { setPageTitle, setPageTabs, activePageTab, setActivePageTab } = usePage();
+    const { setupPage, activeTab: activePageTab } = usePage();
     const { data: users = [], isFetching: isLoadingUsers } = useGetUsers();
     const [editingDisplayName, setEditingDisplayName] = useState(null);
     const [editModalIsOpen, setEditModalIsOpen] = useState(false);
 
     // Configure the page
     useEffect(() => {
-        setPageTitle("Users");
-        setPageTabs(pageTabs);
-        setActivePageTab(pageTabs[0].value);
-    }, [setPageTitle, setPageTabs, setActivePageTab]);
+        setupPage({
+            title: "Leaderboards",
+            tabs: pageTabs,
+            activeTab: pageTabs[0].value,
+        });
+    }, [setupPage]);
 
     // Define the table data
     const activeUsers = useMemo(() => {

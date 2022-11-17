@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { useAuth } from "../contexts/auth";
+import { useAccessToken } from "../contexts/auth";
 import { useAxios } from "../contexts/axios";
 
-export const useSearchPeople = (query) => {
+export const useSearchPeople = async (query) => {
     const axios = useAxios();
-    const { accessToken } = useAuth();
+    const { accessToken } = useAccessToken();
 
     return useQuery({
         queryKey: ["search/people", query],

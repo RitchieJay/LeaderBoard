@@ -1,55 +1,52 @@
+import { InteractionType } from "@azure/msal-browser";
+import { useMsal } from "@azure/msal-react";
 import { useEffect } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { useGetMe } from "../api/users";
 import LoginCta from "../components/login-cta";
 import Navbar from "../components/navbar";
 import PageHeader from "../components/page-header";
-import { useAcquireAccessToken, useIsAuthenticated } from "../contexts/auth";
+import Spinner from "../components/spinner";
+import { useAccessToken, useAuth, useIsAuthenticated } from "../contexts/auth";
 
-const navigation = [
+export const navigation = [
     { name: "Leaderboards", to: "/admin/leaderboards" },
     { name: "Users", to: "/admin/users" },
 ];
 
 const AdminLayout = () => {
+    const { inProgress: msalInProgress } = useMsal();
+    const { setUser, userIsLoading } = useAuth();
     const isAuthenticated = useIsAuthenticated();
-    const acquireAccessToken = useAcquireAccessToken();
-    const { pathname } = useLocation();
-    const navigate = useNavigate();
+    const { accessToken, accessTokenIsLoading } = useAccessToken();
 
     // Fetch data
-    const { data: user, isFetching: isLoadingUser } = useGetMe();
+    const { data: fetchedUser, isLoading: fetchedUserIsLoading } = useGetMe();
 
-    // Acquire an access token
+    // Resolve and store the authenticated user
     useEffect(() => {
-        (async () => {
-            await acquireAccessToken();
-        })();
-    }, [acquireAccessToken]);
-
-    // If we are authenticated, forward onto the first nav route
-    useEffect(() => {
-        if (isAuthenticated && user) {
-            // Check to ensure we are on a valid page
-            const matchedNavigation = navigation.filter(({ to }) => {
-                return pathname.startsWith(`${to}`);
-            });
-
-            // If not, redirect to the first page
-            if (matchedNavigation.length < 1) {
-                navigate(navigation[0].to);
-            }
-        }
-    }, [isAuthenticated, pathname, navigate, user]);
+        setUser({ user: fetchedUser, userIsLoading: !!accessToken && fetchedUserIsLoading });
+    }, [fetchedUser, fetchedUserIsLoading, accessToken, setUser]);
 
     return (
         <>
-            <Navbar navigation={isAuthenticated ? navigation : []} user={user} isLoadingUser={isLoadingUser} />
+            <Navbar navigation={isAuthenticated ? navigation : []} />
             <PageHeader />
 
             <main>
                 <div className="mx-auto max-w-7xl p-4 sm:p-6 lg:px-8">
-                    {isAuthenticated && user ? <Outlet /> : <LoginCta />}
+                    {(!accessToken && accessTokenIsLoading) ||
+                    userIsLoading ||
+                    msalInProgress !== InteractionType.None ? (
+                        <div className="flex flex-row items-center justify-center space-x-2">
+                            <Spinner className="h-5 w-5 text-gray-600" />
+                            <p className="text-gray-600">Loading...</p>
+                        </div>
+                    ) : isAuthenticated ? (
+                        <Outlet />
+                    ) : (
+                        <LoginCta />
+                    )}
                 </div>
             </main>
         </>

@@ -1,14 +1,12 @@
-import { InteractionType } from "@azure/msal-browser";
-import { useMsal } from "@azure/msal-react";
+import { useState } from "react";
 import { useLogin } from "../contexts/auth";
 import Button from "./button";
 import Heading from "./heading";
 
 const LoginCta = () => {
-    const { inProgress } = useMsal();
-    const handleLogin = useLogin();
+    const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-    const isAuthenticating = inProgress !== InteractionType.None;
+    const login = useLogin();
 
     return (
         <div className="h-full w-full rounded-xl border bg-white p-8 text-center sm:p-10">
@@ -17,8 +15,17 @@ const LoginCta = () => {
             </Heading>
             <p className="mb-6 text-gray-500">Login via the button below to access admin features.</p>
 
-            <Button as="button" type="button" color="brand" disabled={isAuthenticating} onClick={() => handleLogin()}>
-                {isAuthenticating ? "Logging You In..." : "Login with Microsoft"}
+            <Button
+                as="button"
+                type="button"
+                color="brand"
+                disabled={isLoggingIn}
+                onClick={() => {
+                    setIsLoggingIn(true);
+                    login();
+                }}
+            >
+                {isLoggingIn ? "Logging You In..." : "Login with Microsoft"}
             </Button>
         </div>
     );

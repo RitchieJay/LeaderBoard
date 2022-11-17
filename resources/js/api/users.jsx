@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "../contexts/auth";
+import { useAccessToken } from "../contexts/auth";
 import { useAxios } from "../contexts/axios";
 
 export const useGetMe = () => {
     const axios = useAxios();
-    const { accessToken } = useAuth();
+    const { accessToken } = useAccessToken();
 
     return useQuery({
         queryKey: ["me"],
@@ -20,7 +20,7 @@ export const useGetMe = () => {
 
 export const useGetUsers = () => {
     const axios = useAxios();
-    const { accessToken } = useAuth();
+    const { accessToken } = useAccessToken();
 
     return useQuery({
         queryKey: ["users"],
@@ -36,7 +36,7 @@ export const useGetUsers = () => {
 
 export const useGetUserByDisplayName = (displayName) => {
     const axios = useAxios();
-    const { accessToken } = useAuth();
+    const { accessToken } = useAccessToken();
 
     return useQuery({
         queryKey: ["users", displayName],
@@ -50,12 +50,13 @@ export const useGetUserByDisplayName = (displayName) => {
     });
 };
 
-export const useCreateUser = () => {
+export const useCreateUser = ({ onSuccess, ...options }) => {
     const axios = useAxios();
-    const { accessToken } = useAuth();
+    const { accessToken } = useAccessToken();
     const queryClient = useQueryClient();
 
     return useMutation({
+        ...options,
         mutationFn: async (data) => {
             const response = await axios.post(`users`, data, {
                 headers: { Authorization: `Bearer ${accessToken}` },
@@ -64,16 +65,18 @@ export const useCreateUser = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["users"] });
+            onSuccess();
         },
     });
 };
 
-export const useUpdateUserByDisplayName = () => {
+export const useUpdateUserByDisplayName = ({ onSuccess, ...options }) => {
     const axios = useAxios();
-    const { accessToken } = useAuth();
+    const { accessToken } = useAccessToken();
     const queryClient = useQueryClient();
 
     return useMutation({
+        ...options,
         mutationFn: async ({ existingDisplayName, ...data }) => {
             const response = await axios.patch(`users/${existingDisplayName}`, data, {
                 headers: { Authorization: `Bearer ${accessToken}` },
@@ -82,16 +85,18 @@ export const useUpdateUserByDisplayName = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["users"] });
+            onSuccess();
         },
     });
 };
 
-export const useArchiveUserByDisplayName = () => {
+export const useArchiveUserByDisplayName = ({ onSuccess, ...options }) => {
     const axios = useAxios();
-    const { accessToken } = useAuth();
+    const { accessToken } = useAccessToken();
     const queryClient = useQueryClient();
 
     return useMutation({
+        ...options,
         mutationFn: async (displayName) => {
             const response = await axios.delete(`users/${displayName}`, {
                 headers: { Authorization: `Bearer ${accessToken}` },
@@ -100,6 +105,7 @@ export const useArchiveUserByDisplayName = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["users"] });
+            onSuccess();
         },
     });
 };

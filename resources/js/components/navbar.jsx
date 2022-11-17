@@ -2,10 +2,13 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import { useMemo } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { useAuth } from "../contexts/auth";
 import Logo from "./logo";
 import Spinner from "./spinner";
 
-const Navbar = ({ navigation, user, isLoadingUser = true, className }) => {
+const Navbar = ({ navigation, className }) => {
+    const { user, userIsLoading } = useAuth();
+
     const userRole = useMemo(() => {
         if (!user) {
             return "Not logged in";
@@ -51,7 +54,7 @@ const Navbar = ({ navigation, user, isLoadingUser = true, className }) => {
                     {/* begin user */}
                     <div className="hidden flex-row items-center justify-end space-x-1 text-right text-sm font-medium sm:flex">
                         <span className="text-brand-200">
-                            {isLoadingUser ? <Spinner className="h-5 w-5" /> : userRole}
+                            {userIsLoading ? <Spinner className="h-5 w-5" /> : userRole}
                         </span>
                         {user?.displayName && (
                             <>
@@ -76,8 +79,6 @@ Navbar.propTypes = {
             to: PropTypes.string.isRequired,
         })
     ).isRequired,
-    user: PropTypes.object,
-    isLoadingUser: PropTypes.bool,
     className: PropTypes.string,
 };
 

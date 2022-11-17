@@ -2,14 +2,16 @@ import { useEffect } from "react";
 import { usePage } from "../../contexts/page";
 
 const AdminLeaderboardsPage = () => {
-    const { setPageTitle, setPageTabs, setActivePageTab } = usePage();
+    const { setupPage } = usePage();
 
     // Configure the page
     useEffect(() => {
-        setPageTitle("Leaderboards");
-        setPageTabs([]);
-        setActivePageTab(null);
-    }, [setPageTitle, setPageTabs, setActivePageTab]);
+        setupPage({
+            title: "Leaderboards",
+            tabs: [],
+            activeTab: null,
+        });
+    }, [setupPage]);
 
     return <p>Leaderboards page!</p>;
 };
