@@ -2,13 +2,10 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import { useMemo } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { useGetMe } from "../api/users";
 import Logo from "./logo";
 import Spinner from "./spinner";
 
-const Navbar = ({ navigation, className }) => {
-    const { data: user, isFetching: isFetchingUser } = useGetMe();
-
+const Navbar = ({ navigation, user, isLoadingUser = true, className }) => {
     const userRole = useMemo(() => {
         if (!user) {
             return "Not logged in";
@@ -54,13 +51,13 @@ const Navbar = ({ navigation, className }) => {
                     {/* begin user */}
                     <div className="hidden flex-row items-center justify-end space-x-1 text-right text-sm font-medium sm:flex">
                         <span className="text-brand-200">
-                            {!user && isFetchingUser ? <Spinner className="h-5 w-5" /> : userRole}
+                            {isLoadingUser ? <Spinner className="h-5 w-5" /> : userRole}
                         </span>
                         {user?.displayName && (
                             <>
                                 <span className="text-xs text-brand-200">/</span>
                                 <span className="text-white">
-                                    {user.privateForename} {user.privateSurname}
+                                    {user?.person?.forename} {user?.person?.surname}
                                 </span>
                             </>
                         )}
@@ -79,6 +76,8 @@ Navbar.propTypes = {
             to: PropTypes.string.isRequired,
         })
     ).isRequired,
+    user: PropTypes.object,
+    isLoadingUser: PropTypes.bool,
     className: PropTypes.string,
 };
 

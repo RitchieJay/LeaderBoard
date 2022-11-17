@@ -1,74 +1,23 @@
 import { PlusCircleIcon } from "@heroicons/react/20/solid";
-import { createColumnHelper } from "@tanstack/react-table";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useGetUsers } from "../../api/users";
-import Badge from "../../components/badge";
 import Button from "../../components/button";
-import Link from "../../components/link";
 import Spinner from "../../components/spinner";
 import Table from "../../components/table";
 import { usePage } from "../../contexts/page";
-import { sortFullName } from "../../utils/table";
+import AdminEditUserModal from "../../modals/admin/edit-user";
+import { columns as usersTableColumns } from "../../tables/admin/users";
 
 const pageTabs = [
     { value: "active", name: "Active" },
     { value: "inactive", name: "Inactive" },
 ];
 
-const columnHelper = createColumnHelper();
-const usersTableColumns = [
-    columnHelper.accessor("displayName", {
-        id: "displayName",
-        header: "Username",
-        sortDescFirst: false,
-        meta: {
-            cell: {
-                renderFn: (cell, children, className) => (
-                    <Link className={className} to={`/admin/users/${cell.getValue()}/edit`}>
-                        {children}
-                    </Link>
-                ),
-            },
-        },
-    }),
-    columnHelper.accessor((row) => `${row.privateForename} ${row.privateSurname}`, {
-        id: "name",
-        header: "Name",
-        sortDescFirst: false,
-        sortingFn: (a, b) =>
-            sortFullName(
-                { forename: a.original.privateForename, surname: a.original.privateSurname },
-                { forename: b.original.privateForename, surname: b.original.privateSurname }
-            ),
-        meta: {
-            cell: { className: "hidden sm:table-cell" },
-            header: { className: "hidden sm:table-cell" },
-        },
-    }),
-    columnHelper.accessor("privateUsername", {
-        id: "email",
-        header: "Email",
-        sortDescFirst: false,
-        meta: {
-            cell: { className: "hidden md:table-cell" },
-            header: { className: "hidden md:table-cell" },
-        },
-    }),
-    columnHelper.accessor("isAdmin", {
-        id: "role",
-        header: "Role",
-        sortDescFirst: false,
-        cell: ({ getValue }) => (getValue() ? <Badge color="brand">Admin</Badge> : <Badge color="default">User</Badge>),
-        meta: {
-            cell: { wrapperClassName: "text-center" },
-            header: { wrapperClassName: "justify-center" },
-        },
-    }),
-];
-
 const AdminUsersPage = () => {
     const { setPageTitle, setPageTabs, activePageTab, setActivePageTab } = usePage();
     const { data: users = [], isFetching: isLoadingUsers } = useGetUsers();
+    const [editingDisplayName, setEditingDisplayName] = useState(null);
+    const [editModalIsOpen, setEditModalIsOpen] = useState(false);
 
     // Configure the page
     useEffect(() => {
@@ -85,6 +34,12 @@ const AdminUsersPage = () => {
         return users.filter((u) => !u.isActive);
     }, [users]);
 
+    // Define the modal callbacks
+    const handleOpenEditModal = (displayName) => {
+        setEditingDisplayName(displayName);
+        setEditModalIsOpen(true);
+    };
+
     // Loading state
     if ((isLoadingUsers && activeUsers.length < 1) || !activePageTab) {
         return (
@@ -97,13 +52,14 @@ const AdminUsersPage = () => {
 
     return (
         <>
+            {/* User tables */}
             {activePageTab === "active" && (
                 <Table
                     data={activeUsers}
-                    columns={usersTableColumns}
+                    columns={usersTableColumns(handleOpenEditModal)}
                     headerProps={{
                         rightPanelContent: (
-                            <Button color="brand" to="/admin/users/create">
+                            <Button color="brand" type="button" onClick={() => handleOpenEditModal(null)}>
                                 <PlusCircleIcon className="h-5 w-5" />
                                 <span className="ml-1.5 hidden sm:inline">New User</span>
                             </Button>
@@ -111,7 +67,17 @@ const AdminUsersPage = () => {
                     }}
                 />
             )}
-            {activePageTab === "inactive" && <Table data={inactiveUsers} columns={usersTableColumns} />}
+            {activePageTab === "inactive" && (
+                <Table data={inactiveUsers} columns={usersTableColumns(handleOpenEditModal)} />
+            )}
+
+            {/* Create/edit user modal */}
+            <AdminEditUserModal
+                isOpen={editModalIsOpen}
+                onClose={() => setEditModalIsOpen(false)}
+                onCloseFinish={() => setEditingDisplayName(null)}
+                displayName={editingDisplayName}
+            />
         </>
     );
 };

@@ -25,7 +25,7 @@ class DbUserProvider implements BaseUserProvider
 	{
 		$user = $this->usersRepo->getUserByUsername($identifier, true);
 
-		if ($user->isActive) {
+		if ($user->isAdmin && $user->isActive && ($user->person->isActive ?? false)) {
 			return $user;
 		}
 

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useGetMe } from "../api/users";
 import LoginCta from "../components/login-cta";
 import Navbar from "../components/navbar";
 import PageHeader from "../components/page-header";
@@ -16,6 +17,9 @@ const AdminLayout = () => {
     const { pathname } = useLocation();
     const navigate = useNavigate();
 
+    // Fetch data
+    const { data: user, isFetching: isLoadingUser } = useGetMe();
+
     // Acquire an access token
     useEffect(() => {
         (async () => {
@@ -25,7 +29,7 @@ const AdminLayout = () => {
 
     // If we are authenticated, forward onto the first nav route
     useEffect(() => {
-        if (isAuthenticated) {
+        if (isAuthenticated && user) {
             // Check to ensure we are on a valid page
             const matchedNavigation = navigation.filter(({ to }) => {
                 return pathname.startsWith(`${to}`);
@@ -36,16 +40,16 @@ const AdminLayout = () => {
                 navigate(navigation[0].to);
             }
         }
-    }, [isAuthenticated, pathname, navigate]);
+    }, [isAuthenticated, pathname, navigate, user]);
 
     return (
         <>
-            <Navbar navigation={isAuthenticated ? navigation : []} />
+            <Navbar navigation={isAuthenticated ? navigation : []} user={user} isLoadingUser={isLoadingUser} />
             <PageHeader />
 
             <main>
                 <div className="mx-auto max-w-7xl p-4 sm:p-6 lg:px-8">
-                    {isAuthenticated ? <Outlet /> : <LoginCta />}
+                    {isAuthenticated && user ? <Outlet /> : <LoginCta />}
                 </div>
             </main>
         </>

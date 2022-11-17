@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,15 @@ Route::middleware("auth")->group(function ()
 	Route::prefix('/users')->middleware('api.ensure-user-is-admin')->group(function ()
 	{
 		Route::get('/', [UsersController::class, 'getUsers']);
-		Route::get('/{displayName}', [UsersController::class, 'getUserByDisplayName']);
+		Route::post('/', [UsersController::class, 'createUser']);
+
+		Route::prefix('/{displayName}')->group(function ()
+		{
+			Route::get('/', [UsersController::class, 'getUserByDisplayName']);
+			Route::patch('/', [UsersController::class, 'updateUserByDisplayName']);
+			Route::delete('/', [UsersController::class, 'archiveUserByDisplayName']);
+		});
 	});
+
+	Route::get('/search/people', [SearchController::class, 'searchPeople'])->middleware('api.ensure-user-is-admin');
 });

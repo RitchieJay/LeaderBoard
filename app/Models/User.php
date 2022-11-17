@@ -14,19 +14,15 @@ class User implements Authenticatable
 	public bool $isAdmin;
 	public SerializableDateTime $createdAt;
 	public bool $isActive;
-	public ?string $privateId;
-	public ?int $privatePersonCode;
-	public ?string $privateForename;
-	public ?string $privateSurname;
-	public ?string $privateUsername;
+	public ?Person $person;
 
 	/**
 	 * Constructs an instance of the model with the given data.
 	 *
 	 * @param stdClass $data
-	 * @param bool $includePrivateFields
+	 * @param bool $includePerson
 	 */
-	public function __construct(stdClass $data, bool $includePrivateFields = false)
+	public function __construct(stdClass $data, bool $includePerson = false)
 	{
 		$this->usersId = $data->users_id;
 		$this->displayName = $data->display_name;
@@ -34,12 +30,16 @@ class User implements Authenticatable
 		$this->createdAt = SerializableDateTime::fromDateTime($data->created_at);
 		$this->isActive = (bool)$data->is_active;
 
-		if ($includePrivateFields) {
-			$this->privateId = $data->private_id;
-			$this->privatePersonCode = $data->private_person_code;
-			$this->privateForename = $data->private_forename;
-			$this->privateSurname = $data->private_surname;
-			$this->privateUsername = $data->private_username;
+		if ($includePerson) {
+			$this->person = new Person((object)[
+				"id" => $data->people_id,
+				"person_code" => $data->people_person_code,
+				"forename" => $data->people_forename,
+				"surname" => $data->people_surname,
+				"username" => $data->people_username,
+				"type" => $data->people_type,
+				"is_active" => $data->people_is_active,
+			]);
 		}
 	}
 
@@ -50,7 +50,7 @@ class User implements Authenticatable
      */
     public function getAuthIdentifierName()
     {
-		return 'private_username';
+		return 'person.username';
     }
 
     /**
@@ -60,7 +60,7 @@ class User implements Authenticatable
      */
     public function getAuthIdentifier()
     {
-        return $this->{Str::camel($this->getAuthIdentifierName())};
+        return $this->person->username ?? null;
     }
 
     /**

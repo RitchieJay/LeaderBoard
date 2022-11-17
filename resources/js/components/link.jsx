@@ -2,19 +2,20 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import { Link as RouterLink } from "react-router-dom";
 
-const Link = ({ children, className, ...rest }) => (
-    <RouterLink
+const Link = ({ as: Tag = RouterLink, children, className, ...rest }) => (
+    <Tag
         {...rest}
         className={classNames(
-            "rounded font-bold text-brand-700 outline-none hover:underline focus:underline active:text-brand-900",
+            "cursor-pointer rounded font-bold text-brand-700 outline-none hover:underline focus:underline active:text-brand-900",
             className
         )}
     >
         {children}
-    </RouterLink>
+    </Tag>
 );
 
 Link.propTypes = {
+    as: PropTypes.elementType,
     children: PropTypes.node,
     className: PropTypes.string,
 };

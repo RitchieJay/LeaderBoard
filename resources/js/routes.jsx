@@ -1,6 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
 import AdminLayout from "./layouts/admin";
-import AdminEditUserPage from "./pages/admin/edit-user";
 import AdminHomePage from "./pages/admin/home";
 import AdminLeaderboardsPage from "./pages/admin/leaderboards";
 import AdminUsersPage from "./pages/admin/users";
@@ -34,14 +33,6 @@ const router = createBrowserRouter([
                 path: "users",
                 element: <AdminUsersPage />,
                 children: [],
-            },
-            {
-                path: "users/create",
-                element: <AdminEditUserPage />,
-            },
-            {
-                path: "users/:displayName/edit",
-                element: <AdminEditUserPage />,
             },
         ],
     },
