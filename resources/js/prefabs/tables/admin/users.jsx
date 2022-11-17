@@ -1,7 +1,7 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import Badge from "../../components/badge";
-import Link from "../../components/link";
-import { sortFullName } from "../../utils/table";
+import Badge from "../../../components/badge";
+import Link from "../../../components/link";
+import { sortFullName } from "../../../utils/table";
 
 const columnHelper = createColumnHelper();
 
@@ -13,7 +13,7 @@ export const columns = (handleOpenEditModal) => [
         meta: {
             cell: {
                 renderFn: (cell, children, className) => (
-                    <Link as="span" className={className} onClick={() => handleOpenEditModal(cell.getValue())}>
+                    <Link as="span" className={className} onClick={() => handleOpenEditModal(cell.row.original)}>
                         {children}
                     </Link>
                 ),

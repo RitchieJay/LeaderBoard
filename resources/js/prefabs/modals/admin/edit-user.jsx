@@ -2,19 +2,19 @@ import { debounce } from "lodash";
 import PropTypes from "prop-types";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useSearchPeople } from "../../api/search";
+import { useSearchPeople } from "../../../api/search";
 import {
     useArchiveUserByDisplayName,
     useCreateUser,
     useGetUserByDisplayName,
     useUpdateUserByDisplayName,
-} from "../../api/users";
-import Button from "../../components/button";
-import Combobox from "../../components/combobox";
-import Input from "../../components/input";
-import Modal, { ModalTitle } from "../../components/modal";
-import PageLoader from "../../components/page-loader";
-import Toggle from "../../components/toggle";
+} from "../../../api/users";
+import Button from "../../../components/button";
+import Combobox from "../../../components/combobox";
+import Input from "../../../components/input";
+import Modal, { ModalTitle } from "../../../components/modal";
+import PageLoader from "../../../components/page-loader";
+import Toggle from "../../../components/toggle";
 
 const resetFormDefaultValues = (user) => ({
     displayName: user?.displayName || "",

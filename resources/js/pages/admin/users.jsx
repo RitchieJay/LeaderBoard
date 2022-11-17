@@ -5,8 +5,8 @@ import Button from "../../components/button";
 import PageLoader from "../../components/page-loader";
 import Table from "../../components/table";
 import { usePage } from "../../contexts/page";
-import AdminEditUserModal from "../../modals/admin/edit-user";
-import { columns as usersTableColumns } from "../../tables/admin/users";
+import AdminEditUserModal from "../../prefabs/modals/admin/edit-user";
+import { columns as usersTableColumns } from "../../prefabs/tables/admin/users";
 
 const pageTabs = [
     { value: "active", name: "Active" },
@@ -16,8 +16,15 @@ const pageTabs = [
 const AdminUsersPage = () => {
     const { setupPage, activeTab: activePageTab } = usePage();
     const { data: users = [], isFetching: isLoadingUsers } = useGetUsers();
-    const [editingDisplayName, setEditingDisplayName] = useState(null);
-    const [editModalIsOpen, setEditModalIsOpen] = useState(false);
+
+    // Configure edit modal state
+    const [editModalState, setEditModalState] = useState({
+        isRendered: false,
+        isOpen: false,
+        props: {
+            user: null,
+        },
+    });
 
     // Configure the page
     useEffect(() => {
@@ -29,21 +36,22 @@ const AdminUsersPage = () => {
     }, [setupPage]);
 
     // Define the table data
-    const activeUsers = useMemo(() => {
-        return users.filter((u) => u.isActive);
-    }, [users]);
-    const inactiveUsers = useMemo(() => {
-        return users.filter((u) => !u.isActive);
-    }, [users]);
+    const activeUsers = useMemo(() => users.filter((u) => u.isActive), [users]);
+    const inactiveUsers = useMemo(() => users.filter((u) => !u.isActive), [users]);
 
     // Define the modal callbacks
-    const handleOpenEditModal = (displayName) => {
-        setEditingDisplayName(displayName);
-        setEditModalIsOpen(true);
+    const handleOpenEditModal = (user) => {
+        setEditModalState({
+            isRendered: true,
+            isOpen: true,
+            props: {
+                user,
+            },
+        });
     };
 
     // Loading state
-    if ((isLoadingUsers && activeUsers.length < 1) || !activePageTab) {
+    if ((isLoadingUsers && users.length < 1) || !activePageTab) {
         return <PageLoader />;
     }
 
@@ -69,12 +77,24 @@ const AdminUsersPage = () => {
             )}
 
             {/* Create/edit user modal */}
-            <AdminEditUserModal
-                isOpen={editModalIsOpen}
-                onClose={() => setEditModalIsOpen(false)}
-                onCloseFinish={() => setEditingDisplayName(null)}
-                displayName={editingDisplayName}
-            />
+            {editModalState.isRendered && (
+                <AdminEditUserModal
+                    {...editModalState.props}
+                    isOpen={editModalState.isOpen}
+                    onClose={() => {
+                        setEditModalState({
+                            ...editModalState,
+                            isOpen: false,
+                        });
+                    }}
+                    onCloseFinish={() => {
+                        setEditModalState({
+                            ...editModalState,
+                            isRendered: false,
+                        });
+                    }}
+                />
+            )}
         </>
     );
 };
