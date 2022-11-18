@@ -13,7 +13,8 @@ const Tabs = ({ tabs, activeTab, onTabChange, className, ...rest }) => (
                         {
                             // Active
                             "bg-brand-100 text-brand-700": activeTab && activeTab === tab.value,
-                            "text-gray-500 hover:text-gray-700": !activeTab || activeTab !== tab.value,
+                            "text-gray-500 hover:text-gray-700":
+                                !activeTab || activeTab !== tab.value,
                         }
                     )}
                     onClick={() => onTabChange(tab)}

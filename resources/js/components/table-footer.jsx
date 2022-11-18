@@ -2,12 +2,23 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import Pagination from "./pagination";
 
-const TableFooter = ({ currentPageIndex, pageSize, totalPages, totalRows, onPaginationChange, className, ...rest }) => {
+const TableFooter = ({
+    currentPageIndex,
+    pageSize,
+    totalPages,
+    totalRows,
+    onPaginationChange,
+    className,
+    ...rest
+}) => {
     const showingFrom = totalRows < 1 ? 0 : currentPageIndex * pageSize + 1;
     const showingTo = Math.min(currentPageIndex * pageSize + pageSize, totalRows);
 
     return (
-        <div {...rest} className={classNames("flex flex-row items-center justify-between", className)}>
+        <div
+            {...rest}
+            className={classNames("flex flex-row items-center justify-between", className)}
+        >
             <div className="hidden sm:block">
                 <p className="text-sm text-gray-700">
                     {"Showing "}
@@ -26,7 +37,11 @@ const TableFooter = ({ currentPageIndex, pageSize, totalPages, totalRows, onPagi
                 </p>
             </div>
             <div>
-                <Pagination currentPageIndex={currentPageIndex} totalPages={totalPages} onChange={onPaginationChange} />
+                <Pagination
+                    currentPageIndex={currentPageIndex}
+                    totalPages={totalPages}
+                    onChange={onPaginationChange}
+                />
             </div>
         </div>
     );

@@ -35,7 +35,8 @@ const Navbar = ({ navigation, className, ...rest }) => {
                                             "rounded-md px-3 py-2 text-sm font-medium outline-none outline-2 outline-offset-0 focus:outline-white",
                                             {
                                                 "bg-brand-700 text-white": isActive,
-                                                "text-white hover:bg-brand-500 hover:bg-opacity-75": !isActive,
+                                                "text-white hover:bg-brand-500 hover:bg-opacity-75":
+                                                    !isActive,
                                             }
                                         )
                                     }

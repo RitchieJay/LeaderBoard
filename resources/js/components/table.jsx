@@ -51,7 +51,10 @@ const renderHeader = (header) => {
 };
 
 const renderCell = (cell) => {
-    const cellWrapperClasses = classNames("p-3", cell.column.columnDef?.meta?.cell?.wrapperClassName);
+    const cellWrapperClasses = classNames(
+        "p-3",
+        cell.column.columnDef?.meta?.cell?.wrapperClassName
+    );
     const cellValue = renderCellValue(cell);
 
     return (
@@ -110,12 +113,16 @@ const Table = ({ data, columns, headerProps, footerProps }) => {
                 <table className="min-w-full divide-y divide-gray-300">
                     <thead className="bg-gray-50">
                         {table.getHeaderGroups().map((headerGroup) => (
-                            <tr key={headerGroup.id}>{headerGroup.headers.map((header) => renderHeader(header))}</tr>
+                            <tr key={headerGroup.id}>
+                                {headerGroup.headers.map((header) => renderHeader(header))}
+                            </tr>
                         ))}
                     </thead>
                     <tbody className="bg-white">
                         {table.getRowModel().rows.map((row) => (
-                            <tr key={row.id}>{row.getVisibleCells().map((cell) => renderCell(cell))}</tr>
+                            <tr key={row.id}>
+                                {row.getVisibleCells().map((cell) => renderCell(cell))}
+                            </tr>
                         ))}
                     </tbody>
                 </table>

@@ -10,7 +10,13 @@ const TableHeader = ({
     rightPanelContent,
     ...rest
 }) => (
-    <div {...rest} className={classNames("mb-4 flex flex-row items-center justify-between space-x-3", className)}>
+    <div
+        {...rest}
+        className={classNames(
+            "mb-4 flex flex-row items-center justify-between space-x-3",
+            className
+        )}
+    >
         <div className="flex-1 sm:w-80 sm:flex-initial lg:w-96">
             <Input
                 type="text"

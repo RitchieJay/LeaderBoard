@@ -13,7 +13,11 @@ export const columns = (handleOpenEditModal) => [
         meta: {
             cell: {
                 renderFn: (cell, children, className) => (
-                    <Link as="span" className={className} onClick={() => handleOpenEditModal(cell.row.original)}>
+                    <Link
+                        as="span"
+                        className={className}
+                        onClick={() => handleOpenEditModal(cell.row.original)}
+                    >
                         {children}
                     </Link>
                 ),
@@ -47,7 +51,8 @@ export const columns = (handleOpenEditModal) => [
         id: "role",
         header: "Role",
         sortDescFirst: false,
-        cell: ({ getValue }) => (getValue() ? <Badge color="brand">Admin</Badge> : <Badge color="default">User</Badge>),
+        cell: ({ getValue }) =>
+            getValue() ? <Badge color="brand">Admin</Badge> : <Badge color="default">User</Badge>,
         meta: {
             cell: { wrapperClassName: "text-center" },
             header: { wrapperClassName: "justify-center" },

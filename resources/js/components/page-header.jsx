@@ -18,7 +18,11 @@ const PageHeader = ({ className, ...rest }) => {
                     )}
                 </div>
                 {tabs && tabs.length > 0 && (
-                    <Tabs tabs={tabs} activeTab={activeTab} onTabChange={(tab) => setActiveTab(tab.value)} />
+                    <Tabs
+                        tabs={tabs}
+                        activeTab={activeTab}
+                        onTabChange={(tab) => setActiveTab(tab.value)}
+                    />
                 )}
             </div>
         </header>

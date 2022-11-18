@@ -21,5 +21,6 @@ export const sortFullName = (
     return a < b ? -1 : 1;
 };
 
-export const renderHeaderValue = (header) => flexRender(header.column.columnDef.header, header.getContext());
+export const renderHeaderValue = (header) =>
+    flexRender(header.column.columnDef.header, header.getContext());
 export const renderCellValue = (cell) => flexRender(cell.column.columnDef.cell, cell.getContext());

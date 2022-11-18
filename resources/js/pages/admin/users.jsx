@@ -40,7 +40,7 @@ const AdminUsersPage = () => {
     const inactiveUsers = useMemo(() => users.filter((u) => !u.isActive), [users]);
 
     // Define the modal callbacks
-    const handleOpenEditModal = (user) => {
+    const handleOpenEditModal = (user = null) => {
         setEditModalState({
             isRendered: true,
             isOpen: true,
@@ -64,7 +64,11 @@ const AdminUsersPage = () => {
                     columns={usersTableColumns(handleOpenEditModal)}
                     headerProps={{
                         rightPanelContent: (
-                            <Button color="brand" type="button" onClick={() => handleOpenEditModal(null)}>
+                            <Button
+                                color="brand"
+                                type="button"
+                                onClick={() => handleOpenEditModal(null)}
+                            >
                                 <PlusCircleIcon className="h-5 w-5" />
                                 <span className="ml-1.5 hidden sm:inline">New User</span>
                             </Button>

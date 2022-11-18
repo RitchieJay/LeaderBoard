@@ -1,4 +1,8 @@
-import { useAccount, useIsAuthenticated as useMsalIsAuthenticated, useMsal } from "@azure/msal-react";
+import {
+    useAccount,
+    useIsAuthenticated as useMsalIsAuthenticated,
+    useMsal,
+} from "@azure/msal-react";
 import PropTypes from "prop-types";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { loginRequest } from "../auth-config";
@@ -20,7 +24,10 @@ export const useIsAuthenticated = () => {
     const { accessToken } = useAccessToken();
     const { user } = useAuth();
 
-    return useMemo(() => msalIsAuthenticated && !!accessToken && !!user, [msalIsAuthenticated, accessToken, user]);
+    return useMemo(
+        () => msalIsAuthenticated && !!accessToken && !!user,
+        [msalIsAuthenticated, accessToken, user]
+    );
 };
 
 export const useLogin = () => {

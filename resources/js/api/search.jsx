@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAccessToken } from "../contexts/auth";
 import { useAxios } from "../contexts/axios";
 
-export const useSearchPeople = async (query) => {
+export const useSearchPeople = (query) => {
     const axios = useAxios();
     const { accessToken } = useAccessToken();
 

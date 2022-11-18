@@ -30,6 +30,7 @@ export const useGetUsers = () => {
             });
             return response.data;
         },
+        keepPreviousData: true,
         enabled: !!accessToken,
     });
 };
@@ -50,7 +51,7 @@ export const useGetUserByDisplayName = (displayName) => {
     });
 };
 
-export const useCreateUser = ({ onSuccess, ...options }) => {
+export const useCreateUser = (options) => {
     const axios = useAxios();
     const { accessToken } = useAccessToken();
     const queryClient = useQueryClient();
@@ -65,12 +66,14 @@ export const useCreateUser = ({ onSuccess, ...options }) => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["users"] });
-            onSuccess();
+            if (options?.onSuccess) {
+                options.onSuccess();
+            }
         },
     });
 };
 
-export const useUpdateUserByDisplayName = ({ onSuccess, ...options }) => {
+export const useUpdateUserByDisplayName = (options) => {
     const axios = useAxios();
     const { accessToken } = useAccessToken();
     const queryClient = useQueryClient();
@@ -85,12 +88,14 @@ export const useUpdateUserByDisplayName = ({ onSuccess, ...options }) => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["users"] });
-            onSuccess();
+            if (options?.onSuccess) {
+                options.onSuccess();
+            }
         },
     });
 };
 
-export const useArchiveUserByDisplayName = ({ onSuccess, ...options }) => {
+export const useArchiveUserByDisplayName = (options) => {
     const axios = useAxios();
     const { accessToken } = useAccessToken();
     const queryClient = useQueryClient();
@@ -105,7 +110,9 @@ export const useArchiveUserByDisplayName = ({ onSuccess, ...options }) => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["users"] });
-            onSuccess();
+            if (options?.onSuccess) {
+                options.onSuccess();
+            }
         },
     });
 };

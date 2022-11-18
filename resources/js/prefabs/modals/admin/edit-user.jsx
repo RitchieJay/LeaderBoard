@@ -6,56 +6,44 @@ import { useSearchPeople } from "../../../api/search";
 import {
     useArchiveUserByDisplayName,
     useCreateUser,
-    useGetUserByDisplayName,
     useUpdateUserByDisplayName,
 } from "../../../api/users";
 import Button from "../../../components/button";
 import Combobox from "../../../components/combobox";
 import Input from "../../../components/input";
 import Modal, { ModalTitle } from "../../../components/modal";
-import PageLoader from "../../../components/page-loader";
 import Toggle from "../../../components/toggle";
 
-const resetFormDefaultValues = (user) => ({
-    displayName: user?.displayName || "",
-    isAdmin: user?.isAdmin || false,
-    person: user?.person || null,
-});
-
-const AdminEditUserModal = ({ displayName, onClose, onCloseFinish, ...rest }) => {
-    const [formDefaultValues, setFormDefaultValues] = useState(resetFormDefaultValues);
-    const [personQuery, setPersonQuery] = useState("");
-    const [isPerformingAction, setIsPerformingAction] = useState(false);
+const AdminEditUserModal = ({ user, isOpen, onClose, ...rest }) => {
+    const [personQuery, setPersonQuery] = useState(user?.person?.username ?? "");
 
     // Fetch data
-    const { data: user = null } = useGetUserByDisplayName(displayName);
-    const { data: people = [], isFetching: isLoadingPeople } = useSearchPeople(personQuery);
+    const { data: people = [] } = useSearchPeople(personQuery);
 
     // Data mutations
-    const { mutate: createUser } = useCreateUser({
-        onSuccess: () => {
-            onClose();
-        },
-        onSettled: () => {
-            setIsPerformingAction(false);
-        },
-    });
-    const { mutate: updateUser } = useUpdateUserByDisplayName({
-        onSuccess: () => {
-            onClose();
-        },
-        onSettled: () => {
-            setIsPerformingAction(false);
-        },
-    });
-    const { mutate: archiveUser } = useArchiveUserByDisplayName({
-        onSuccess: () => {
-            onClose();
-        },
-        onSettled: () => {
-            setIsPerformingAction(false);
-        },
-    });
+    const {
+        mutate: createUser,
+        isLoading: isCreatingUser,
+        isSuccess: didCreateUser,
+    } = useCreateUser();
+    const {
+        mutate: updateUser,
+        isLoading: isUpdatingUser,
+        isSuccess: didUpdateUser,
+    } = useUpdateUserByDisplayName();
+    const {
+        mutate: archiveUser,
+        isLoading: isArchivingUser,
+        isSuccess: didArchiveUser,
+    } = useArchiveUserByDisplayName();
+
+    // Determine whether actions are being performed
+    const isPerformingAction = useMemo(() => {
+        return isCreatingUser || isUpdatingUser || isArchivingUser;
+    }, [isCreatingUser, isUpdatingUser, isArchivingUser]);
+    const didCompleteAction = useMemo(() => {
+        return didCreateUser || didUpdateUser || didArchiveUser;
+    }, [didCreateUser, didUpdateUser, didArchiveUser]);
 
     // Configure the form
     const {
@@ -65,9 +53,14 @@ const AdminEditUserModal = ({ displayName, onClose, onCloseFinish, ...rest }) =>
         formState: { errors },
         handleSubmit: formHandleSubmit,
     } = useForm({
-        defaultValues: formDefaultValues,
+        defaultValues: {
+            displayName: user?.displayName ?? "",
+            isAdmin: user?.isAdmin ?? false,
+            person: user?.person ?? null,
+        },
     });
 
+    // Handle person query changes
     const handlePersonQueryChange = (newPersonQuery) => {
         setPersonQuery(newPersonQuery);
     };
@@ -75,206 +68,177 @@ const AdminEditUserModal = ({ displayName, onClose, onCloseFinish, ...rest }) =>
         return debounce(handlePersonQueryChange, 300);
     }, []);
 
+    // Handle form reset
     const handleResetForm = useCallback(() => {
-        const newFormDefaultValues = resetFormDefaultValues(user);
-        setFormDefaultValues(newFormDefaultValues);
-        formReset(newFormDefaultValues);
-
-        // Update the person picker query to pre-filter
-        if (user) {
-            handlePersonQueryChange(`${user?.person?.forename} ${user?.person?.surname} ${user?.person?.username}`);
-        } else {
-            handlePersonQueryChange("");
-        }
+        formReset();
+        handlePersonQueryChange(user?.person?.username ? user.person.username : "");
     }, [user, formReset]);
 
-    const handleCreateUser = useCallback(
-        async (data) => {
-            setIsPerformingAction(true);
-            await createUser({
-                displayName: data.displayName,
-                personCode: data.person.personCode,
-                isAdmin: data.isAdmin,
-            });
-        },
-        [createUser]
-    );
-
-    const handleUpdateUser = useCallback(
-        async (data) => {
-            setIsPerformingAction(true);
-            await updateUser({
-                existingDisplayName: user.displayName,
-                displayName: data.displayName,
-                personCode: data.person.personCode,
-                isAdmin: data.isAdmin,
-            });
-        },
-        [user, updateUser]
-    );
-
-    const handleArchiveUser = useCallback(
-        async (userDisplayName) => {
-            setIsPerformingAction(true);
-            await archiveUser(userDisplayName);
-        },
-        [archiveUser]
-    );
-
-    const handleEnableUser = useCallback(
-        async (userToEnable) => {
-            handleUpdateUser(userToEnable);
-        },
-        [handleUpdateUser]
-    );
-
+    // Handle form submission
     const handleSubmitForm = useCallback(
-        async (data) => {
-            // Update existing users
+        (data) => {
+            const payload = {
+                displayName: data.displayName,
+                personCode: data.person.personCode,
+                isAdmin: data.isAdmin,
+            };
+
+            // Create / update users
             if (user) {
-                handleUpdateUser(data);
-            }
-            // Create new users
-            else {
-                handleCreateUser(data);
+                updateUser({
+                    ...payload,
+                    existingDisplayName: user.displayName,
+                });
+            } else {
+                createUser(payload);
             }
         },
-        [user, handleCreateUser, handleUpdateUser]
+        [user, createUser, updateUser]
     );
 
-    // On modal close, reset the form
-    const handleModalCloseFinish = useCallback(() => {
-        handleResetForm();
-        onCloseFinish();
-    }, [handleResetForm, onCloseFinish]);
-
-    // Reset the form whenever the user changes
+    // When actions succeed, close the modal
     useEffect(() => {
-        handleResetForm();
-    }, [handleResetForm]);
+        if (didCompleteAction && isOpen) {
+            onClose();
+        }
+    }, [didCompleteAction, isOpen, onClose]);
 
     return (
-        <Modal onClose={onClose} onCloseFinish={handleModalCloseFinish} {...rest}>
-            <ModalTitle>{displayName ? "Edit" : "Create"} User</ModalTitle>
-            {(displayName && !user) || (user && isLoadingPeople && people.length < 1) ? (
-                <PageLoader />
-            ) : (
-                <form
-                    className="flex flex-col space-y-4 sm:space-y-6 lg:space-y-8"
-                    onSubmit={formHandleSubmit(handleSubmitForm)}
-                >
+        <Modal {...rest} isOpen={isOpen} onClose={onClose}>
+            <ModalTitle>{user ? "Edit" : "Create"} User</ModalTitle>
+            <form
+                className="flex flex-col space-y-4 sm:space-y-6 lg:space-y-8"
+                onSubmit={formHandleSubmit(handleSubmitForm)}
+            >
+                <div>
+                    <Input
+                        type="text"
+                        id="edit-user-display-name"
+                        withLabel="Display Name"
+                        hasErrors={!!errors.displayName}
+                        withHelper={
+                            errors.displayName
+                                ? "Enter a valid display name"
+                                : "Can only contain letters, numbers, and underscores"
+                        }
+                        placeholder="E.g. jamesbond_007"
+                        disabled={isPerformingAction || didCompleteAction}
+                        {...formRegister("displayName", {
+                            required: true,
+                            maxLength: 100,
+                            pattern: /^[A-Za-z0-9_]+$/g,
+                        })}
+                    />
+                </div>
+                <div>
+                    <Controller
+                        name="person"
+                        control={formControl}
+                        rules={{ required: true }}
+                        render={({ field }) => (
+                            <Combobox
+                                id="edit-user-person"
+                                withLabel="Linked Person"
+                                hasErrors={!!errors.person}
+                                withHelper={errors.person ? "Select a person" : undefined}
+                                options={people}
+                                getDisplayValue={(val) =>
+                                    val ? `${val.forename} ${val.surname}` : ""
+                                }
+                                getOption={(option) => ({
+                                    key: `${option.personCode}`,
+                                    value: `${option.personCode}`,
+                                    primaryLabel: `${option.forename} ${option.surname}`,
+                                    secondaryLabel: `${option.id}`,
+                                })}
+                                onQueryChange={debouncedHandlePersonQueryChange}
+                                disabled={isPerformingAction || didCompleteAction}
+                                {...field}
+                            />
+                        )}
+                    />
+                </div>
+                <div>
+                    <Controller
+                        name="isAdmin"
+                        control={formControl}
+                        render={({ field }) => (
+                            <Toggle
+                                id="edit-user-is-admin"
+                                withLabel="Is Admin"
+                                checked={field.value}
+                                withHelper="Allows the user to manage users and leaderboards"
+                                disabled={isPerformingAction || didCompleteAction}
+                                {...field}
+                            />
+                        )}
+                    />
+                </div>
+                <div className="flex flex-row justify-between space-x-3 border-t border-gray-300 pt-4">
                     <div>
-                        <Input
-                            type="text"
-                            id="edit-user-display-name"
-                            withLabel="Display Name"
-                            hasErrors={!!errors.displayName}
-                            withHelper={
-                                errors.displayName
-                                    ? "Enter a valid display name"
-                                    : "Can only contain letters, numbers, and underscores"
-                            }
-                            placeholder="E.g. jamesbond_007"
-                            {...formRegister("displayName", {
-                                required: true,
-                                maxLength: 100,
-                                pattern: /^[A-Za-z0-9_]+$/g,
-                            })}
-                        />
+                        {user && user.displayName && (
+                            <>
+                                {user.isActive ? (
+                                    <Button
+                                        as="button"
+                                        type="button"
+                                        color="red"
+                                        disabled={isPerformingAction || didCompleteAction}
+                                        onClick={() => archiveUser(user.displayName)}
+                                    >
+                                        Archive<span className="hidden sm:inline">&nbsp;User</span>
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        as="button"
+                                        type="button"
+                                        color="default"
+                                        disabled={isPerformingAction || didCompleteAction}
+                                        onClick={() =>
+                                            updateUser({
+                                                existingDisplayName: user.displayName,
+                                                displayName: user.displayName,
+                                                personCode: user.person.personCode,
+                                                isAdmin: user.isAdmin,
+                                            })
+                                        }
+                                    >
+                                        Enable<span className="hidden sm:inline">&nbsp;User</span>
+                                    </Button>
+                                )}
+                            </>
+                        )}
                     </div>
-                    <div>
-                        <Controller
-                            name="person"
-                            control={formControl}
-                            rules={{ required: true }}
-                            render={({ field }) => (
-                                <Combobox
-                                    id="edit-user-person"
-                                    withLabel="Linked Person"
-                                    hasErrors={!!errors.person}
-                                    withHelper={errors.person ? "Select a person" : undefined}
-                                    options={people}
-                                    getDisplayValue={(val) => (val ? `${val.forename} ${val.surname}` : "")}
-                                    getOption={(option) => ({
-                                        key: `${option.personCode}`,
-                                        value: `${option.personCode}`,
-                                        primaryLabel: `${option.forename} ${option.surname}`,
-                                        secondaryLabel: `${option.id}`,
-                                    })}
-                                    onQueryChange={debouncedHandlePersonQueryChange}
-                                    {...field}
-                                />
-                            )}
-                        />
+                    <div className="space-x-3">
+                        <Button
+                            as="button"
+                            type="button"
+                            color="default"
+                            className="hidden sm:inline-block"
+                            disabled={isPerformingAction || didCompleteAction}
+                            onClick={() => handleResetForm()}
+                        >
+                            Reset
+                        </Button>
+                        <Button
+                            as="button"
+                            type="submit"
+                            color="brand"
+                            disabled={isPerformingAction || didCompleteAction}
+                        >
+                            {user ? "Save" : "Create"}
+                            <span className="hidden sm:inline">&nbsp;User</span>
+                        </Button>
                     </div>
-                    <div>
-                        <Controller
-                            name="isAdmin"
-                            control={formControl}
-                            render={({ field }) => (
-                                <Toggle
-                                    id="edit-user-is-admin"
-                                    withLabel="Is Admin"
-                                    checked={field.value}
-                                    withHelper="Allows the user to manage users and leaderboards"
-                                    {...field}
-                                />
-                            )}
-                        />
-                    </div>
-                    <div className="flex flex-row justify-between space-x-3 border-t border-gray-300 pt-4">
-                        <div>
-                            {user && user.displayName && (
-                                <>
-                                    {user.isActive ? (
-                                        <Button
-                                            as="button"
-                                            type="button"
-                                            color="red"
-                                            disabled={isPerformingAction}
-                                            onClick={() => handleArchiveUser(user?.displayName)}
-                                        >
-                                            Archive<span className="hidden sm:inline">&nbsp;User</span>
-                                        </Button>
-                                    ) : (
-                                        <Button
-                                            as="button"
-                                            type="button"
-                                            color="default"
-                                            disabled={isPerformingAction}
-                                            onClick={() => handleEnableUser(user)}
-                                        >
-                                            Enable<span className="hidden sm:inline">&nbsp;User</span>
-                                        </Button>
-                                    )}
-                                </>
-                            )}
-                        </div>
-                        <div className="space-x-3">
-                            <Button
-                                as="button"
-                                type="button"
-                                color="default"
-                                className="hidden sm:inline-block"
-                                disabled={isPerformingAction}
-                                onClick={() => handleResetForm()}
-                            >
-                                Reset
-                            </Button>
-                            <Button as="button" type="submit" color="brand" disabled={isPerformingAction}>
-                                {user ? "Save" : "Create"}
-                                <span className="hidden sm:inline">&nbsp;User</span>
-                            </Button>
-                        </div>
-                    </div>
-                </form>
-            )}
+                </div>
+            </form>
         </Modal>
     );
 };
 
 AdminEditUserModal.propTypes = {
     displayName: PropTypes.string,
+    isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
 };
 

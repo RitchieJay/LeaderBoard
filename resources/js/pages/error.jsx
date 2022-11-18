@@ -28,7 +28,9 @@ const ErrorPage = () => {
                             <Heading level={1} className="mb-2">
                                 {error.statusText || "Unknown Error"}
                             </Heading>
-                            <p className="text-gray-500">Please check the URL in the address bar and try again.</p>
+                            <p className="text-gray-500">
+                                Please check the URL in the address bar and try again.
+                            </p>
                         </div>
                     </div>
                 </main>

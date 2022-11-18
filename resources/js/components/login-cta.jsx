@@ -12,7 +12,9 @@ const LoginCta = ({ ...rest }) => {
             <Heading className="mb-2" level={2}>
                 You're not logged in right now.
             </Heading>
-            <p className="mb-6 text-gray-500">Login via the button below to access admin features.</p>
+            <p className="mb-6 text-gray-500">
+                Login via the button below to access admin features.
+            </p>
 
             <Button
                 as="button"

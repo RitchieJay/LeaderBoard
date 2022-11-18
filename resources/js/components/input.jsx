@@ -5,7 +5,10 @@ import { forwardRef } from "react";
 import Label from "./label";
 
 const Input = forwardRef(
-    ({ id, value, onChange, withLabel, withHelper, hasErrors = false, className, ...rest }, ref) => (
+    (
+        { id, value, onChange, withLabel, withHelper, hasErrors = false, className, ...rest },
+        ref
+    ) => (
         <>
             {withLabel && (
                 <Label htmlFor={id} className="mb-2">
@@ -34,12 +37,22 @@ const Input = forwardRef(
                 />
                 {hasErrors && (
                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                        <ExclamationCircleIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
+                        <ExclamationCircleIcon
+                            className="h-5 w-5 text-red-500"
+                            aria-hidden="true"
+                        />
                     </div>
                 )}
             </div>
             {withHelper && (
-                <p className={classNames("mt-2 text-xs", hasErrors ? "text-red-500" : "text-gray-500")}>{withHelper}</p>
+                <p
+                    className={classNames(
+                        "mt-2 text-xs",
+                        hasErrors ? "text-red-500" : "text-gray-500"
+                    )}
+                >
+                    {withHelper}
+                </p>
             )}
         </>
     )

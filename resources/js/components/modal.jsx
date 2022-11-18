@@ -4,9 +4,14 @@ import PropTypes from "prop-types";
 import { Fragment } from "react";
 import Heading from "./heading";
 
-const Modal = ({ isOpen, onClose, children, onCloseFinish }) => (
+const Modal = ({ isOpen, onClose, onCloseFinish, children, className, ...rest }) => (
     <Transition.Root afterLeave={onCloseFinish} show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={onClose}>
+        <Dialog
+            {...rest}
+            as="div"
+            className={classNames("relative z-10", className)}
+            onClose={onClose}
+        >
             {/* Underlay */}
             <Transition.Child
                 as={Fragment}
@@ -45,8 +50,9 @@ const Modal = ({ isOpen, onClose, children, onCloseFinish }) => (
 Modal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-    children: PropTypes.node,
     onCloseFinish: PropTypes.func,
+    children: PropTypes.node,
+    className: PropTypes.string,
 };
 
 export const ModalTitle = ({ className, children, ...rest }) => (

@@ -47,7 +47,10 @@ const Combobox = forwardRef(
                 />
                 <BaseCombobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-3 focus:outline-none">
                     {hasErrors ? (
-                        <ExclamationCircleIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
+                        <ExclamationCircleIcon
+                            className="h-5 w-5 text-red-500"
+                            aria-hidden="true"
+                        />
                     ) : (
                         <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                     )}
@@ -70,7 +73,12 @@ const Combobox = forwardRef(
                                 >
                                     {({ active, selected }) => (
                                         <div className="flex">
-                                            <span className={classNames("truncate", selected && "font-bold")}>
+                                            <span
+                                                className={classNames(
+                                                    "truncate",
+                                                    selected && "font-bold"
+                                                )}
+                                            >
                                                 {option.primaryLabel}
                                             </span>
                                             {option.secondaryLabel && (
@@ -92,7 +100,14 @@ const Combobox = forwardRef(
                 )}
             </div>
             {withHelper && (
-                <p className={classNames("mt-2 text-xs", hasErrors ? "text-red-500" : "text-gray-500")}>{withHelper}</p>
+                <p
+                    className={classNames(
+                        "mt-2 text-xs",
+                        hasErrors ? "text-red-500" : "text-gray-500"
+                    )}
+                >
+                    {withHelper}
+                </p>
             )}
         </BaseCombobox>
     )

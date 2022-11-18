@@ -18,13 +18,16 @@ const Button = ({
             "inline-flex shrink-0 items-center rounded-md border font-medium shadow-sm focus:outline-none",
             {
                 // Colors
-                "border-gray-300 bg-white text-gray-700 focus:ring-2 focus:ring-offset-2": color === "default",
+                "border-gray-300 bg-white text-gray-700 focus:ring-2 focus:ring-offset-2":
+                    color === "default",
                 "hover:bg-gray-50 focus:ring-brand-500": color === "default" && !disabled,
 
-                "border-transparent bg-brand-600 text-white focus:ring-2 focus:ring-offset-2": color === "brand",
+                "border-transparent bg-brand-600 text-white focus:ring-2 focus:ring-offset-2":
+                    color === "brand",
                 "hover:bg-brand-700 focus:ring-brand-500": color === "brand" && !disabled,
 
-                "border-transparent bg-red-600 text-white focus:ring-2 focus:ring-offset-2": color === "red",
+                "border-transparent bg-red-600 text-white focus:ring-2 focus:ring-offset-2":
+                    color === "red",
                 "hover:bg-red-700 focus:ring-red-500": color === "red" && !disabled,
 
                 "border-transparent bg-white text-brand-600": color === "white",

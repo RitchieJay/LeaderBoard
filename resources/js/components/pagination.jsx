@@ -10,12 +10,31 @@ import { useCallback } from "react";
 
 const buttons = [
     { key: "page-start", icon: ChevronDoubleLeftIcon, updatePageFn: (pageIndex, totalPages) => 0 },
-    { key: "page-prev", icon: ChevronLeftIcon, updatePageFn: (pageIndex, totalPages) => pageIndex - 1 },
-    { key: "page-next", icon: ChevronRightIcon, updatePageFn: (pageIndex, totalPages) => pageIndex + 1 },
-    { key: "page-end", icon: ChevronDoubleRightIcon, updatePageFn: (pageIndex, totalPages) => totalPages - 1 },
+    {
+        key: "page-prev",
+        icon: ChevronLeftIcon,
+        updatePageFn: (pageIndex, totalPages) => pageIndex - 1,
+    },
+    {
+        key: "page-next",
+        icon: ChevronRightIcon,
+        updatePageFn: (pageIndex, totalPages) => pageIndex + 1,
+    },
+    {
+        key: "page-end",
+        icon: ChevronDoubleRightIcon,
+        updatePageFn: (pageIndex, totalPages) => totalPages - 1,
+    },
 ];
 
-const Pagination = ({ as: Tag = "nav", currentPageIndex, totalPages, onChange, className, ...rest }) => {
+const Pagination = ({
+    as: Tag = "nav",
+    currentPageIndex,
+    totalPages,
+    onChange,
+    className,
+    ...rest
+}) => {
     const handleChange = useCallback(
         (updatePageFn) => {
             let newCurrentPageIndex = updatePageFn(currentPageIndex, totalPages);
