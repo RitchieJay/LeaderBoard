@@ -1,41 +1,27 @@
-import { TrophyIcon } from "@heroicons/react/20/solid";
+import { BoltIcon } from "@heroicons/react/20/solid";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 
-const Logo = ({ color = "brand", size = "base", withText = false, className, ...rest }) => (
+const Logo = ({ color = "white", className, ...rest }) => (
     <div
         {...rest}
         className={classNames(
-            "flex flex-row items-center justify-start",
+            "flex flex-row items-center justify-start space-x-1 text-sm uppercase",
             {
-                // Size
-                "space-x-2": size === "base",
-
-                // Colors
-                "text-brand-600": color === "brand",
+                // Color
                 "text-white": color === "white",
             },
             className
         )}
     >
-        <TrophyIcon
-            className={classNames(
-                "flex-shrink-0",
-                {
-                    // Size
-                    "h-6 w-6": size === "base",
-                },
-                className
-            )}
-        />
-        {withText && <span className="text-sm font-bold">Leaderboard</span>}
+        <span className="-mr-[0.125em] font-normal tracking-[0.25em] opacity-80">Rank</span>
+        <BoltIcon className="h-5 w-5" />
+        <span className="font-bold tracking-[0.25em]">Up</span>
     </div>
 );
 
 Logo.propTypes = {
-    color: PropTypes.oneOf(["brand", "white"]),
-    size: PropTypes.oneOf(["base"]),
-    withText: PropTypes.bool,
+    color: PropTypes.oneOf(["white"]),
     className: PropTypes.string,
 };
 

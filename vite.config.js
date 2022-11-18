@@ -1,9 +1,9 @@
-import { defineConfig } from "vite";
-import laravel from "laravel-vite-plugin";
 import react from "@vitejs/plugin-react";
 import fs from "fs";
+import laravel from "laravel-vite-plugin";
+import { defineConfig } from "vite";
 
-const host = "leaderboard.local";
+const host = "rankup.local";
 const certPath = "./certificates/development.pfx";
 const certPassphrase = "local-development";
 

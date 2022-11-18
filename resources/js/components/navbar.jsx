@@ -23,7 +23,7 @@ const Navbar = ({ navigation, className, ...rest }) => {
                             to="/admin"
                             className="rounded-sm outline-none outline-2 outline-offset-[6px] focus:outline-white"
                         >
-                            <Logo color="white" withText={true} />
+                            <Logo color="white" />
                         </Link>
                         <div className="flex items-center space-x-2">
                             {navigation.map((item) => (
