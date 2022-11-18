@@ -18,3 +18,20 @@ export const useGetRankingMethods = () => {
         enabled: !!accessToken,
     });
 };
+
+export const useGetLeaderboards = () => {
+    const axios = useAxios();
+    const { accessToken } = useAccessToken();
+
+    return useQuery({
+        queryKey: ["leaderboards"],
+        queryFn: async () => {
+            const response = await axios.get("leaderboards", {
+                headers: { Authorization: `Bearer ${accessToken}` },
+            });
+            return response.data;
+        },
+        keepPreviousData: true,
+        enabled: !!accessToken,
+    });
+};

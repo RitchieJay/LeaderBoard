@@ -18,22 +18,27 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware("auth")->group(function ()
 {
-	Route::get("/me", [UsersController::class, 'getMe']);
+	Route::get("/me", [UsersController::class, "getMe"])->middleware("api.ensure-user-is-admin");
 
-	Route::prefix('/users')->middleware('api.ensure-user-is-admin')->group(function ()
+	Route::prefix("/users")->middleware("api.ensure-user-is-admin")->group(function ()
 	{
-		Route::get('/', [UsersController::class, 'getUsers']);
-		Route::post('/', [UsersController::class, 'createUser']);
+		Route::get("/", [UsersController::class, "getUsers"]);
+		Route::post("/", [UsersController::class, "createUser"]);
 
-		Route::prefix('/{displayName}')->group(function ()
+		Route::prefix("/{displayName}")->group(function ()
 		{
-			Route::get('/', [UsersController::class, 'getUserByDisplayName']);
-			Route::patch('/', [UsersController::class, 'updateUserByDisplayName']);
-			Route::delete('/', [UsersController::class, 'archiveUserByDisplayName']);
+			Route::get("/", [UsersController::class, "getUserByDisplayName"]);
+			Route::patch("/", [UsersController::class, "updateUserByDisplayName"]);
+			Route::delete("/", [UsersController::class, "archiveUserByDisplayName"]);
 		});
 	});
 
-	Route::get('/search/people', [SearchController::class, 'searchPeople'])->middleware('api.ensure-user-is-admin');
+	Route::get("/search/people", [SearchController::class, "searchPeople"])->middleware("api.ensure-user-is-admin");
 
-	Route::get("/ranking-methods", [LeaderboardsController::class, 'getRankingMethods']);
+	Route::get("/ranking-methods", [LeaderboardsController::class, "getRankingMethods"])->middleware("api.ensure-user-is-admin");
+
+	Route::prefix("/leaderboards")->middleware("api.ensure-user-is-admin")->group(function ()
+	{
+		Route::get("/", [LeaderboardsController::class, "getLeaderboards"]);
+	});
 });

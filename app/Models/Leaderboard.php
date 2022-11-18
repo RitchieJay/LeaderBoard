@@ -12,6 +12,7 @@ class Leaderboard
 	public string $urlName;
 	public string $theme;
 	public SerializableDateTime $createdAt;
+	public bool $isActive;
 	public RankingMethod $rankingMethod;
 
 	/**
@@ -26,6 +27,7 @@ class Leaderboard
 		$this->urlName = $data->url_name;
 		$this->theme = $data->theme;
 		$this->createdAt = SerializableDateTime::fromDateTime($data->created_at);
+		$this->isActive = (bool)$data->is_active;
 		$this->rankingMethod = new RankingMethod((object)[
 			"ranking_methods_id" => $data->ranking_methods_id,
 			"reference" => $data->ranking_methods_reference,

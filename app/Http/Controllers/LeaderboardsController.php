@@ -22,4 +22,12 @@ class LeaderboardsController extends Controller
 
 		return response()->json($rankingMethods);
 	}
+
+	public function getLeaderboards(Request $request): JsonResponse
+	{
+		// Fetch the data
+		$leaderboards = $this->leaderboardsRepo->getLeaderboards();
+
+		return response()->json($leaderboards);
+	}
 }

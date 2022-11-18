@@ -10,6 +10,7 @@ const Badge = ({ color = "default", children, className, ...rest }) => (
                 // Color
                 "bg-gray-100 text-gray-800": color === "default",
                 "bg-brand-100 text-brand-800": color === "brand",
+                "bg-indigo-100 text-indigo-800": color === "indigo",
             },
             className
         )}
@@ -19,7 +20,7 @@ const Badge = ({ color = "default", children, className, ...rest }) => (
 );
 
 Badge.propTypes = {
-    color: PropTypes.oneOf(["default", "brand"]),
+    color: PropTypes.oneOf(["default", "brand", "indigo"]),
     children: PropTypes.node,
     className: PropTypes.string,
 };
