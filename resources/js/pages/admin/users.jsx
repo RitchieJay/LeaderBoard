@@ -10,7 +10,7 @@ import { columns as usersTableColumns } from "../../prefabs/tables/admin/users";
 
 const pageTabs = [
     { value: "active", name: "Active" },
-    { value: "inactive", name: "Inactive" },
+    { value: "archived", name: "Archived" },
 ];
 
 const AdminUsersPage = () => {
@@ -37,7 +37,7 @@ const AdminUsersPage = () => {
 
     // Define the table data
     const activeUsers = useMemo(() => users.filter((u) => u.isActive), [users]);
-    const inactiveUsers = useMemo(() => users.filter((u) => !u.isActive), [users]);
+    const archivedUsers = useMemo(() => users.filter((u) => !u.isActive), [users]);
 
     // Define the modal callbacks
     const handleOpenEditModal = (user = null) => {
@@ -76,8 +76,8 @@ const AdminUsersPage = () => {
                     }}
                 />
             )}
-            {activePageTab === "inactive" && (
-                <Table data={inactiveUsers} columns={usersTableColumns(handleOpenEditModal)} />
+            {activePageTab === "archived" && (
+                <Table data={archivedUsers} columns={usersTableColumns(handleOpenEditModal)} />
             )}
 
             {/* Create/edit user modal */}

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LeaderboardsController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
@@ -33,4 +34,6 @@ Route::middleware("auth")->group(function ()
 	});
 
 	Route::get('/search/people', [SearchController::class, 'searchPeople'])->middleware('api.ensure-user-is-admin');
+
+	Route::get("/ranking-methods", [LeaderboardsController::class, 'getRankingMethods']);
 });

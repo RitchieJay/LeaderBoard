@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\Utility\SerializableDateTime;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Support\Str;
 use stdClass;
 
 class User implements Authenticatable
