@@ -1,100 +1,28 @@
-import { debounce } from "lodash";
 import PropTypes from "prop-types";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { useSearchPeople } from "../../../api/search";
-import {
-    useArchiveUserByDisplayName,
-    useCreateUser,
-    useUpdateUserByDisplayName,
-} from "../../../api/users";
+import { useEffect } from "react";
+import { Controller } from "react-hook-form";
 import Button from "../../../components/button";
 import Combobox from "../../../components/combobox";
 import Input from "../../../components/input";
 import Modal, { ModalTitle } from "../../../components/modal";
 import Toggle from "../../../components/toggle";
+import useForm from "../../forms/admin/edit-user";
 
 const AdminEditUserModal = ({ user, isOpen, onClose, ...rest }) => {
-    const [personQuery, setPersonQuery] = useState(user?.person?.username ?? "");
-
-    // Fetch data
-    const { data: people = [] } = useSearchPeople(personQuery);
-
-    // Data mutations
-    const {
-        mutate: createUser,
-        isLoading: isCreatingUser,
-        isSuccess: didCreateUser,
-    } = useCreateUser();
-    const {
-        mutate: updateUser,
-        isLoading: isUpdatingUser,
-        isSuccess: didUpdateUser,
-    } = useUpdateUserByDisplayName();
-    const {
-        mutate: archiveUser,
-        isLoading: isArchivingUser,
-        isSuccess: didArchiveUser,
-    } = useArchiveUserByDisplayName();
-
-    // Determine whether actions are being performed
-    const isPerformingAction = useMemo(() => {
-        return isCreatingUser || isUpdatingUser || isArchivingUser;
-    }, [isCreatingUser, isUpdatingUser, isArchivingUser]);
-    const didCompleteAction = useMemo(() => {
-        return didCreateUser || didUpdateUser || didArchiveUser;
-    }, [didCreateUser, didUpdateUser, didArchiveUser]);
-
     // Configure the form
     const {
-        register: formRegister,
-        reset: formReset,
-        control: formControl,
-        formState: { errors },
-        handleSubmit: formHandleSubmit,
-    } = useForm({
-        defaultValues: {
-            displayName: user?.displayName ?? "",
-            isAdmin: user?.isAdmin ?? false,
-            person: user?.person ?? null,
-        },
-    });
-
-    // Handle person query changes
-    const handlePersonQueryChange = (newPersonQuery) => {
-        setPersonQuery(newPersonQuery);
-    };
-    const debouncedHandlePersonQueryChange = useMemo(() => {
-        return debounce(handlePersonQueryChange, 300);
-    }, []);
-
-    // Handle form reset
-    const handleResetForm = useCallback(() => {
-        formReset();
-        handlePersonQueryChange(user?.person?.username ? user.person.username : "");
-    }, [user, formReset]);
-
-    // Handle form submission
-    const handleSubmitForm = useCallback(
-        (data) => {
-            const payload = {
-                displayName: data.displayName,
-                personCode: data.person.personCode,
-                isAdmin: data.isAdmin,
-            };
-
-            // Create / update users
-            if (user) {
-                updateUser({
-                    ...payload,
-                    existingDisplayName: user.displayName,
-                });
-            } else {
-                createUser(payload);
-            }
-        },
-        [user, createUser, updateUser]
-    );
+        register,
+        control,
+        resetForm,
+        handleFormSubmit,
+        people,
+        setPersonQueryDebounced,
+        updateUser,
+        archiveUser,
+        isPerformingAction,
+        didCompleteAction,
+        errors,
+    } = useForm(user);
 
     // When actions succeed, close the modal
     useEffect(() => {
@@ -108,7 +36,7 @@ const AdminEditUserModal = ({ user, isOpen, onClose, ...rest }) => {
             <ModalTitle>{user ? "Edit" : "Create"} User</ModalTitle>
             <form
                 className="flex flex-col space-y-4 sm:space-y-6 lg:space-y-8"
-                onSubmit={formHandleSubmit(handleSubmitForm)}
+                onSubmit={handleFormSubmit}
             >
                 <div>
                     <Input
@@ -117,13 +45,12 @@ const AdminEditUserModal = ({ user, isOpen, onClose, ...rest }) => {
                         withLabel="Display Name"
                         hasErrors={!!errors.displayName}
                         withHelper={
-                            errors.displayName
-                                ? "Enter a valid display name"
-                                : "Can only contain letters, numbers, and underscores"
+                            errors.displayName ||
+                            "Display name can only contain letters, numbers, and underscores"
                         }
                         placeholder="E.g. jamesbond_007"
                         disabled={isPerformingAction || didCompleteAction}
-                        {...formRegister("displayName", {
+                        {...register("displayName", {
                             required: true,
                             maxLength: 100,
                             pattern: /^[A-Za-z0-9_]+$/g,
@@ -133,14 +60,14 @@ const AdminEditUserModal = ({ user, isOpen, onClose, ...rest }) => {
                 <div>
                     <Controller
                         name="person"
-                        control={formControl}
+                        control={control}
                         rules={{ required: true }}
                         render={({ field }) => (
                             <Combobox
                                 id="edit-user-person"
                                 withLabel="Linked Person"
                                 hasErrors={!!errors.person}
-                                withHelper={errors.person ? "Select a person" : undefined}
+                                withHelper={errors.person}
                                 options={people}
                                 getDisplayValue={(val) =>
                                     val ? `${val.forename} ${val.surname}` : ""
@@ -151,7 +78,7 @@ const AdminEditUserModal = ({ user, isOpen, onClose, ...rest }) => {
                                     primaryLabel: `${option.forename} ${option.surname}`,
                                     secondaryLabel: `${option.id}`,
                                 })}
-                                onQueryChange={debouncedHandlePersonQueryChange}
+                                onQueryChange={setPersonQueryDebounced}
                                 disabled={isPerformingAction || didCompleteAction}
                                 {...field}
                             />
@@ -161,7 +88,7 @@ const AdminEditUserModal = ({ user, isOpen, onClose, ...rest }) => {
                 <div>
                     <Controller
                         name="isAdmin"
-                        control={formControl}
+                        control={control}
                         render={({ field }) => (
                             <Toggle
                                 id="edit-user-is-admin"
@@ -176,7 +103,7 @@ const AdminEditUserModal = ({ user, isOpen, onClose, ...rest }) => {
                 </div>
                 <div className="flex flex-row justify-between space-x-3 border-t border-gray-300 pt-4">
                     <div>
-                        {user && user.displayName && (
+                        {user && (
                             <>
                                 {user.isActive ? (
                                     <Button
@@ -216,7 +143,7 @@ const AdminEditUserModal = ({ user, isOpen, onClose, ...rest }) => {
                             color="default"
                             className="hidden sm:inline-block"
                             disabled={isPerformingAction || didCompleteAction}
-                            onClick={() => handleResetForm()}
+                            onClick={() => resetForm()}
                         >
                             Reset
                         </Button>

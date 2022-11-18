@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { createContext, useCallback, useContext, useState } from "react";
-import { setDocumentTitle } from "../utils/app";
+import { setDocumentTitle } from "../utils/dom";
 
 const defaultState = {
     title: null,
