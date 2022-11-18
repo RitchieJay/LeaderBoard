@@ -29,7 +29,7 @@ const AdminUsersPage = () => {
     // Configure the page
     useEffect(() => {
         setupPage({
-            title: "Leaderboards",
+            title: "Users",
             tabs: pageTabs,
             activeTab: pageTabs[0].value,
         });
