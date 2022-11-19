@@ -53,7 +53,7 @@ class UsersRepository
 
 	public function createUser(string $displayName, int $personCode, bool $isAdmin, int $createdBy): void
 	{
-		// Fetch the data
+		// Execute the action
 		DB::select($this->sqlFromFile("users/create-user.sql"), [
 			":display_name" => $displayName,
 			":person_code" => $personCode,
@@ -66,7 +66,7 @@ class UsersRepository
 
 	public function updateUserByDisplayName(string $existingDisplayName, string $newDisplayName, int $personCode, bool $isAdmin, int $updatedBy): void
 	{
-		// Fetch the data
+		// Execute the action
 		DB::select($this->sqlFromFile("users/update-user-by-display-name.sql"), [
 			":existing_display_name" => $existingDisplayName,
 			":new_display_name" => $newDisplayName,
@@ -80,7 +80,7 @@ class UsersRepository
 
 	public function archiveUserByDisplayName(string $displayName, int $archivedBy): void
 	{
-		// Fetch the data
+		// Execute the action
 		DB::select($this->sqlFromFile("users/archive-user-by-display-name.sql"), [
 			":display_name" => $displayName,
 			":archived_by" => $archivedBy

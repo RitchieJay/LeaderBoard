@@ -56,17 +56,6 @@ class UsersController extends Controller
 		return response()->json($user);
 	}
 
-	public function getUserByDisplayName(Request $request, string $displayName): JsonResponse
-	{
-		// Fetch the data
-		$user = $this->usersRepo->getUserByDisplayName(
-			$displayName,
-			!!$request->user()
-		);
-
-		return response()->json($user);
-	}
-
 	public function updateUserByDisplayName(UpdateUserRequest $request, string $displayName): JsonResponse
 	{
 		$user = DB::transaction(function () use ($request, $displayName) {

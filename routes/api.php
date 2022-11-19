@@ -27,7 +27,6 @@ Route::middleware("auth")->group(function ()
 
 		Route::prefix("/{displayName}")->group(function ()
 		{
-			Route::get("/", [UsersController::class, "getUserByDisplayName"]);
 			Route::patch("/", [UsersController::class, "updateUserByDisplayName"]);
 			Route::delete("/", [UsersController::class, "archiveUserByDisplayName"]);
 		});
@@ -40,5 +39,12 @@ Route::middleware("auth")->group(function ()
 	Route::prefix("/leaderboards")->middleware("api.ensure-user-is-admin")->group(function ()
 	{
 		Route::get("/", [LeaderboardsController::class, "getLeaderboards"]);
+		Route::post("/", [LeaderboardsController::class, "createLeaderboard"]);
+
+		Route::prefix("/{urlName}")->group(function ()
+		{
+			Route::patch("/", [LeaderboardsController::class, "updateLeaderboardByUrlName"]);
+			Route::delete("/", [LeaderboardsController::class, "archiveLeaderboardByUrlName"]);
+		});
 	});
 });

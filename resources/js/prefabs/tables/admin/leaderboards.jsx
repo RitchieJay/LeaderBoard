@@ -1,4 +1,5 @@
 import { createColumnHelper } from "@tanstack/react-table";
+import classNames from "classnames";
 import { format, parseISO } from "date-fns";
 import Badge from "../../../components/badge";
 import Link from "../../../components/link";
@@ -16,8 +17,8 @@ export const columns = (handleOpenEditModal) => [
                 renderFn: (cell, children, className) => (
                     <Link
                         as="span"
-                        className={className}
-                        onClick={() => handleOpenEditModal(null /*cell.row.original*/)}
+                        className={classNames("inline-block", className)}
+                        onClick={() => handleOpenEditModal(cell.row.original)}
                     >
                         {children}
                     </Link>

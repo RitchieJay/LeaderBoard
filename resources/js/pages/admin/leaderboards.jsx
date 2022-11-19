@@ -5,7 +5,7 @@ import Button from "../../components/button";
 import PageLoader from "../../components/page-loader";
 import Table from "../../components/table";
 import { usePage } from "../../contexts/page";
-import AdminEditUserModal from "../../prefabs/modals/admin/edit-user";
+import AdminEditLeaderboardModal from "../../prefabs/modals/admin/edit-leaderboard";
 import { columns as leaderboardsTableColumns } from "../../prefabs/tables/admin/leaderboards";
 
 const pageTabs = [
@@ -46,12 +46,12 @@ const AdminLeaderboardsPage = () => {
     );
 
     // Define the modal callbacks
-    const handleOpenEditModal = (user = null) => {
+    const handleOpenEditModal = (leaderboard = null) => {
         setEditModalState({
             isRendered: true,
             isOpen: true,
             props: {
-                user,
+                leaderboard,
             },
         });
     };
@@ -91,7 +91,7 @@ const AdminLeaderboardsPage = () => {
 
             {/* Create/edit user modal */}
             {editModalState.isRendered && (
-                <AdminEditUserModal
+                <AdminEditLeaderboardModal
                     {...editModalState.props}
                     isOpen={editModalState.isOpen}
                     onClose={() => {

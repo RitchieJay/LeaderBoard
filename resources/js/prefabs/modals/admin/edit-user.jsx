@@ -164,7 +164,7 @@ const AdminEditUserModal = ({ user, isOpen, onClose, ...rest }) => {
 };
 
 AdminEditUserModal.propTypes = {
-    displayName: PropTypes.string,
+    user: PropTypes.object,
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
 };

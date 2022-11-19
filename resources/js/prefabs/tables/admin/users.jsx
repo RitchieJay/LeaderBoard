@@ -1,4 +1,5 @@
 import { createColumnHelper } from "@tanstack/react-table";
+import classNames from "classnames";
 import Badge from "../../../components/badge";
 import Link from "../../../components/link";
 import { sortFullName } from "../../../utils/table";
@@ -15,7 +16,7 @@ export const columns = (handleOpenEditModal) => [
                 renderFn: (cell, children, className) => (
                     <Link
                         as="span"
-                        className={className}
+                        className={classNames("inline-block", className)}
                         onClick={() => handleOpenEditModal(cell.row.original)}
                     >
                         {children}

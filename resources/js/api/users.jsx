@@ -35,22 +35,6 @@ export const useGetUsers = () => {
     });
 };
 
-export const useGetUserByDisplayName = (displayName) => {
-    const axios = useAxios();
-    const { accessToken } = useAccessToken();
-
-    return useQuery({
-        queryKey: ["users", displayName],
-        queryFn: async () => {
-            const response = await axios.get(`users/${displayName}`, {
-                headers: { Authorization: `Bearer ${accessToken}` },
-            });
-            return response.data;
-        },
-        enabled: !!accessToken && !!displayName,
-    });
-};
-
 export const useCreateUser = (options) => {
     const axios = useAxios();
     const { accessToken } = useAccessToken();

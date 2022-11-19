@@ -4,7 +4,7 @@ DECLARE @existing_display_name NVARCHAR(100) = :existing_display_name,
 		@is_admin BIT = :is_admin,
 		@updated_by NUMERIC(10, 0) = :updated_by
 
-EXEC usp_update_user_by_display_name
+EXEC dbo.usp_update_user_by_display_name
 	@existing_display_name = @existing_display_name,
 	@new_display_name = @new_display_name,
 	@person_code = @person_code,
