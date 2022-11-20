@@ -7,7 +7,7 @@ const Heading = ({ as, level, color = "default", children, className, ...rest })
         <Tag
             {...rest}
             className={classNames(
-                "font-bold leading-snug tracking-tight",
+                "font-bold !leading-snug tracking-tight",
                 {
                     // Colors
                     "text-gray-900": color === "default",

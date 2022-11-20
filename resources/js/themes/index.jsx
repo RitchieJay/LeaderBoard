@@ -1,11 +1,7 @@
+import indigo from "./indigo";
+
 const themes = {
-    indigo: {
-        name: "Indigo",
-        badgeColor: "indigo",
-        theme: {
-            test: "value",
-        },
-    },
+    indigo,
 };
 
 export const getTheme = (reference) => {
