@@ -22,8 +22,6 @@ class SearchController extends Controller
 			$request->input("query")
 		);
 
-		// TODO - change user model to have person model nested
-
 		return response()->json($people);
 	}
 }
