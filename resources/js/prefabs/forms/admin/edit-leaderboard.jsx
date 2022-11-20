@@ -11,7 +11,7 @@ import themes from "../../../themes";
 
 const useForm = (leaderboard) => {
     // Data
-    const { data: rankingMethods = [], isFetching: isLoadingRankingMethods } =
+    const { data: rankingMethods = [], isLoading: isLoadingRankingMethods } =
         useGetRankingMethods();
 
     // Select options
