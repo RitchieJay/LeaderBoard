@@ -9,7 +9,6 @@ import LeaderboardPage from "./pages/leaderboard";
 
 const router = createBrowserRouter([
     {
-        path: "/",
         element: <BaseLayout />,
         errorElement: <ErrorPage />,
         children: [
