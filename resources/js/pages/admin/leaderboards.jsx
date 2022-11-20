@@ -69,6 +69,9 @@ const AdminLeaderboardsPage = () => {
                     data={activeLeaderboards}
                     columns={leaderboardsTableColumns(handleOpenEditModal)}
                     headerProps={{
+                        globalFilterProps: {
+                            placeholder: "Search leaderboards...",
+                        },
                         rightPanelContent: (
                             <Button
                                 color="brand"
@@ -86,6 +89,11 @@ const AdminLeaderboardsPage = () => {
                 <Table
                     data={archivedLeaderboards}
                     columns={leaderboardsTableColumns(handleOpenEditModal)}
+                    headerProps={{
+                        globalFilterProps: {
+                            placeholder: "Search leaderboards...",
+                        },
+                    }}
                 />
             )}
 

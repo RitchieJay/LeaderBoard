@@ -103,9 +103,6 @@ const Table = ({ data, columns, headerProps, footerProps }) => {
         <>
             <TableHeader
                 {...headerProps}
-                globalFilterProps={{
-                    placeholder: "Search users...",
-                }}
                 globalFilter={globalFilter || ""}
                 onGlobalFilterChange={(e) => setGlobalFilter(e.target.value)}
             />

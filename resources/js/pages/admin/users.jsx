@@ -63,6 +63,9 @@ const AdminUsersPage = () => {
                     data={activeUsers}
                     columns={usersTableColumns(handleOpenEditModal)}
                     headerProps={{
+                        globalFilterProps: {
+                            placeholder: "Search users...",
+                        },
                         rightPanelContent: (
                             <Button
                                 color="brand"
@@ -77,7 +80,15 @@ const AdminUsersPage = () => {
                 />
             )}
             {activePageTab === "archived" && (
-                <Table data={archivedUsers} columns={usersTableColumns(handleOpenEditModal)} />
+                <Table
+                    data={archivedUsers}
+                    columns={usersTableColumns(handleOpenEditModal)}
+                    headerProps={{
+                        globalFilterProps: {
+                            placeholder: "Search users...",
+                        },
+                    }}
+                />
             )}
 
             {/* Create/edit user modal */}
