@@ -28,7 +28,7 @@ const useForm = (user) => {
 
     // Linked person
     const [personQuery, setPersonQuery] = useState(user?.person?.username ?? "");
-    const { data: people = [] } = useSearchPeople(personQuery);
+    const { data: people = [], isLoading: isLoadingPeople } = useSearchPeople(personQuery);
     const setPersonQueryDebounced = useDebounce((newPersonQuery) => {
         setPersonQuery(newPersonQuery);
     }, LINKED_PERSON_DEBOUNCE_DELAY_MS);
@@ -118,6 +118,7 @@ const useForm = (user) => {
         // Linked person
         setPersonQuery,
         people,
+        isLoadingPeople,
         setPersonQueryDebounced,
 
         // Mutation
