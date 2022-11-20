@@ -33,6 +33,17 @@ class LeaderboardsController extends Controller
 		return response()->json($leaderboards);
 	}
 
+	public function getLeaderboardByUrlName(Request $request, string $urlName): JsonResponse
+	{
+		// Fetch the data
+		$leaderboard = $this->leaderboardsRepo->getLeaderboardByUrlName(
+			$urlName,
+			!!$request->user()
+		);
+
+		return response()->json($leaderboard);
+	}
+
 	public function createLeaderboard(UpdateLeaderboardRequest $request): JsonResponse
 	{
 		$leaderboard = DB::transaction(function () use ($request) {
@@ -50,7 +61,8 @@ class LeaderboardsController extends Controller
 
 			// Fetch the data
 			return $this->leaderboardsRepo->getLeaderboardByUrlName(
-				$data['urlName']
+				$data['urlName'],
+				!!$requestUser
 			);
 		});
 
@@ -75,7 +87,8 @@ class LeaderboardsController extends Controller
 
 			// Fetch the data
 			return $this->leaderboardsRepo->getLeaderboardByUrlName(
-				$data['urlName']
+				$data['urlName'],
+				!!$requestUser
 			);
 		});
 
@@ -94,7 +107,8 @@ class LeaderboardsController extends Controller
 
 		// Fetch the data
 		$leaderboard = $this->leaderboardsRepo->getLeaderboardByUrlName(
-			$urlName
+			$urlName,
+			!!$requestUser
 		);
 
 		return response()->json($leaderboard);

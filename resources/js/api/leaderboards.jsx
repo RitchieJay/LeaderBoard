@@ -36,6 +36,24 @@ export const useGetLeaderboards = () => {
     });
 };
 
+export const useGetLeaderboardByUrlName = (urlName) => {
+    const axios = useAxios();
+    const { accessToken } = useAccessToken();
+
+    const options = !!accessToken
+        ? { headers: { Authorization: `Bearer ${accessToken}` } }
+        : undefined;
+
+    return useQuery({
+        queryKey: ["leaderboards", urlName],
+        queryFn: async () => {
+            const response = await axios.get(`leaderboards/${urlName}`, options);
+            return response.data;
+        },
+        keepPreviousData: true,
+    });
+};
+
 export const useCreateLeaderboard = (options) => {
     const axios = useAxios();
     const { accessToken } = useAccessToken();

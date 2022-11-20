@@ -33,11 +33,12 @@ class LeaderboardsRepository
 		);
 	}
 
-	public function getLeaderboardByUrlName(string $urlName): Leaderboard
+	public function getLeaderboardByUrlName(string $urlName, bool $includeInactive = false): Leaderboard
 	{
 		// Fetch the data
 		$results = DB::select($this->sqlFromFile("leaderboards/get-leaderboard-by-url-name.sql"), [
-			":url_name" => $urlName
+			":url_name" => $urlName,
+			":include_inactive" => $includeInactive
 		]);
 
 		// Handle errors
