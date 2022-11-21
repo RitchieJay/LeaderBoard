@@ -6,6 +6,7 @@ import PageLoader from "../../components/page-loader";
 import Table from "../../components/table";
 import { usePage } from "../../contexts/page";
 import AdminEditLeaderboardModal from "../../prefabs/modals/admin/edit-leaderboard";
+import AdminEditLeaderboardScoresModal from "../../prefabs/modals/admin/edit-leaderboard-scores";
 import { columns as leaderboardsTableColumns } from "../../prefabs/tables/admin/leaderboards";
 
 const pageTabs = [
@@ -17,12 +18,19 @@ const AdminLeaderboardsPage = () => {
     const { setupPage, activeTab: activePageTab } = usePage();
     const { data: leaderboards = [], isFetching: isLoadingLeaderboards } = useGetLeaderboards();
 
-    // Configure edit modal state
+    // Configure modal state
     const [editModalState, setEditModalState] = useState({
         isRendered: false,
         isOpen: false,
         props: {
             user: null,
+        },
+    });
+    const [scoresModalState, setScoresModalState] = useState({
+        isRendered: false,
+        isOpen: false,
+        props: {
+            leaderboard: null,
         },
     });
 
@@ -55,6 +63,15 @@ const AdminLeaderboardsPage = () => {
             },
         });
     };
+    const handleOpenScoresModal = (leaderboard) => {
+        setScoresModalState({
+            isRendered: true,
+            isOpen: true,
+            props: {
+                leaderboard,
+            },
+        });
+    };
 
     // Loading state
     if ((isLoadingLeaderboards && leaderboards.length < 1) || !activePageTab) {
@@ -67,7 +84,7 @@ const AdminLeaderboardsPage = () => {
             {activePageTab === "active" && (
                 <Table
                     data={activeLeaderboards}
-                    columns={leaderboardsTableColumns(handleOpenEditModal)}
+                    columns={leaderboardsTableColumns(handleOpenEditModal, handleOpenScoresModal)}
                     headerProps={{
                         globalFilterProps: {
                             placeholder: "Search leaderboards...",
@@ -88,7 +105,7 @@ const AdminLeaderboardsPage = () => {
             {activePageTab === "archived" && (
                 <Table
                     data={archivedLeaderboards}
-                    columns={leaderboardsTableColumns(handleOpenEditModal)}
+                    columns={leaderboardsTableColumns(handleOpenEditModal, handleOpenScoresModal)}
                     headerProps={{
                         globalFilterProps: {
                             placeholder: "Search leaderboards...",
@@ -97,7 +114,7 @@ const AdminLeaderboardsPage = () => {
                 />
             )}
 
-            {/* Create/edit user modal */}
+            {/* Create/edit leaderboard modal */}
             {editModalState.isRendered && (
                 <AdminEditLeaderboardModal
                     {...editModalState.props}
@@ -111,6 +128,26 @@ const AdminLeaderboardsPage = () => {
                     onCloseFinish={() => {
                         setEditModalState({
                             ...editModalState,
+                            isRendered: false,
+                        });
+                    }}
+                />
+            )}
+
+            {/* Create/edit scores modal */}
+            {scoresModalState.isRendered && (
+                <AdminEditLeaderboardScoresModal
+                    {...scoresModalState.props}
+                    isOpen={scoresModalState.isOpen}
+                    onClose={() => {
+                        setScoresModalState({
+                            ...scoresModalState,
+                            isOpen: false,
+                        });
+                    }}
+                    onCloseFinish={() => {
+                        setScoresModalState({
+                            ...scoresModalState,
                             isRendered: false,
                         });
                     }}

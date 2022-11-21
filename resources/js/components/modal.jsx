@@ -4,7 +4,15 @@ import PropTypes from "prop-types";
 import { Fragment } from "react";
 import Heading from "./heading";
 
-const Modal = ({ isOpen, onClose, onCloseFinish, children, className, ...rest }) => (
+const Modal = ({
+    isOpen,
+    isWide = false,
+    onClose,
+    onCloseFinish,
+    children,
+    className,
+    ...rest
+}) => (
     <Transition.Root afterLeave={onCloseFinish} show={isOpen} as={Fragment}>
         <Dialog
             {...rest}
@@ -37,7 +45,16 @@ const Modal = ({ isOpen, onClose, onCloseFinish, children, className, ...rest })
                         leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                         leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     >
-                        <Dialog.Panel className="relative w-full transform overflow-hidden rounded-lg bg-white p-5 text-left shadow-xl transition-all sm:max-w-xl sm:px-10 sm:py-8 lg:max-w-2xl lg:px-12 lg:py-10">
+                        <Dialog.Panel
+                            className={classNames(
+                                "relative w-full transform overflow-hidden rounded-lg bg-white p-5 text-left shadow-xl transition-all sm:max-w-xl sm:px-10 sm:py-8",
+                                {
+                                    "md:max-w-2xl lg:max-w-4xl lg:px-12 lg:py-10 xl:max-w-5xl":
+                                        isWide,
+                                    "lg:max-w-2xl lg:px-12 lg:py-10": !isWide,
+                                }
+                            )}
+                        >
                             {children}
                         </Dialog.Panel>
                     </Transition.Child>
@@ -49,6 +66,7 @@ const Modal = ({ isOpen, onClose, onCloseFinish, children, className, ...rest })
 
 Modal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
+    isWide: PropTypes.bool,
     onClose: PropTypes.func.isRequired,
     onCloseFinish: PropTypes.func,
     children: PropTypes.node,
