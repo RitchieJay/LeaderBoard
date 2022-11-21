@@ -2,6 +2,7 @@ import react from "@vitejs/plugin-react";
 import fs from "fs";
 import laravel from "laravel-vite-plugin";
 import { defineConfig } from "vite";
+import { chunkSplitPlugin } from "vite-plugin-chunk-split";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 
 const host = "rankup.local";
@@ -22,6 +23,13 @@ export default defineConfig({
                     dest: "../",
                 },
             ],
+        }),
+        chunkSplitPlugin({
+            strategy: "single-vendor",
+            customSplitting: {
+                react: ["react", "react-dom"],
+                msal: ["@azure/msal-react", "@azure/msal-browser"],
+            },
         }),
     ],
     server: {
