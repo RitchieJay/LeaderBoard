@@ -6,6 +6,8 @@ use stdClass;
 
 class RankingMethod
 {
+	const NUMERIC_HIGH_TO_LOW = "numeric-high-to-low";
+
 	public int $rankingMethodsId;
 	public string $reference;
 	public string $name;

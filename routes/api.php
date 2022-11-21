@@ -23,6 +23,7 @@ Route::middleware("api.auth-optional")->group(function () {
 	Route::prefix("/leaderboards/{urlName}")->group(function ()
 	{
 		Route::get("/", [LeaderboardsController::class, "getLeaderboardByUrlName"]);
+		Route::get("/scores", [LeaderboardsController::class, "getScoresForLeaderboard"]);
 	});
 });
 

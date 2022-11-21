@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Leaderboard;
+use App\Models\LeaderboardScore;
 use App\Models\RankingMethod;
 use App\Utilities\ReadsSqlFromFile;
 use Illuminate\Support\Facades\DB;
@@ -87,5 +88,57 @@ class LeaderboardsRepository
 		]);
 
 		// NOTE: We don't return anything here
+	}
+
+	public function getScoresForLeaderboard(int $leaderboardsId, bool $includePerson = false): array
+	{
+		// Fetch the data
+		$results = DB::select($this->sqlFromFile("leaderboards/get-scores-for-leaderboard.sql"), [
+			":leaderboards_id" => $leaderboardsId,
+		]);
+
+		return array_map(
+			fn ($row) => new LeaderboardScore($row, $includePerson),
+			$results
+		);
+	}
+
+	public function rankScores(array &$scores, string $rankingMethod): void
+	{
+		switch ($rankingMethod) {
+			case RankingMethod::NUMERIC_HIGH_TO_LOW:
+			default:
+				$this->rankScoresNumericHighToLow($scores);
+		}
+	}
+
+	public function rankScoresNumericHighToLow(array &$scores): void
+	{
+		// Sort the scores in descending order
+		usort($scores, function ($a, $b) {
+			$aScore = (float)$a->score;
+			$bScore = (float)$b->score;
+
+			if (abs($aScore - $bScore) < PHP_FLOAT_EPSILON) {
+				return 0;
+			}
+
+			return $aScore < $bScore ? 1 : -1;
+		});
+
+		// Rank the scores
+		$previousScore = null;
+		$currentRank = 0;
+		foreach ($scores as &$score) {
+			$currentScore = (float)$score->score;
+
+			// If the score is less than previous, increase rank
+			if (!isset($previousScore) || abs($currentScore - $previousScore) > PHP_FLOAT_EPSILON) {
+				$currentRank += 1;
+			}
+
+			$score->rank = $currentRank;
+			$previousScore = $currentScore;
+		}
 	}
 }

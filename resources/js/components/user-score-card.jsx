@@ -2,9 +2,9 @@ import { TrophyIcon } from "@heroicons/react/20/solid";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 
-const UserScoreCard = ({ rankPrefix = "#", theme, rank, user, score, className }) => (
+const UserScoreCard = ({ rankPrefix = "#", theme, rank, user, score, className, ...rest }) => (
     <div
-        key={`${rank}`}
+        {...rest}
         className={classNames(
             "relative flex w-full flex-row items-center justify-between space-x-4 overflow-hidden rounded-xl",
             theme.containerClasses,
@@ -33,5 +33,6 @@ UserScoreCard.propTypes = {
         displayName: PropTypes.string.isRequired,
     }).isRequired,
     score: PropTypes.string.isRequired,
+    className: PropTypes.string,
 };
 export default UserScoreCard;

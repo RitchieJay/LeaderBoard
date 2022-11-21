@@ -113,4 +113,29 @@ class LeaderboardsController extends Controller
 
 		return response()->json($leaderboard);
 	}
+
+	public function getScoresForLeaderboard(Request $request, string $urlName): JsonResponse
+	{
+		$requestUser = $request->user();
+
+		// Fetch the leaderboard
+		$leaderboard = $this->leaderboardsRepo->getLeaderboardByUrlName(
+			$urlName,
+			!!$requestUser
+		);
+
+		// Fetch the scores
+		$scores = $this->leaderboardsRepo->getScoresForLeaderboard(
+			$leaderboard->leaderboardsId,
+			!!$requestUser
+		);
+
+		// Rank the scores
+		$this->leaderboardsRepo->rankScores(
+			$scores,
+			$leaderboard->rankingMethod->reference
+		);
+
+		return response()->json($scores);
+	}
 }

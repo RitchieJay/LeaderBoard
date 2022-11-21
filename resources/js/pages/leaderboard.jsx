@@ -2,10 +2,11 @@ import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid";
 import classNames from "classnames";
 import React, { Fragment } from "react";
 import { useParams } from "react-router-dom";
-import { useGetLeaderboardByUrlName } from "../api/leaderboards";
+import { useGetLeaderboardByUrlName, useGetScoresForLeaderboard } from "../api/leaderboards";
 import Heading from "../components/heading";
 import Logo from "../components/logo";
 import PageLoader from "../components/page-loader";
+import Spinner from "../components/spinner";
 import UserScoreCard from "../components/user-score-card";
 import { getTheme } from "../themes";
 import { throwNotFound } from "../utils/routing";
@@ -16,27 +17,10 @@ const LeaderboardPage = () => {
     // Data
     const { data: leaderboard, isLoading: isLoadingLeaderboard } =
         useGetLeaderboardByUrlName(urlName);
-    const { theme } = getTheme(leaderboard?.theme);
+    const { data: scores = [], isLoading: isLoadingScores } = useGetScoresForLeaderboard(urlName);
 
-    const scores = [
-        { rank: 1, user: { displayName: "danielcrowe" }, score: 1900 },
-        { rank: 2, user: { displayName: "richardjohnson" }, score: 1342 },
-        { rank: 3, user: { displayName: "mdavies" }, score: 984 },
-        { rank: 4, user: { displayName: "aedge" }, score: 522 },
-        { rank: 5, user: { displayName: "jamesbond_007" }, score: 235 },
-        { rank: 6, user: { displayName: "someone_else" }, score: 124 },
-        { rank: 7, user: { displayName: "someone_else" }, score: 124 },
-        { rank: 8, user: { displayName: "someone_else" }, score: 124 },
-        { rank: 9, user: { displayName: "someone_else" }, score: 124 },
-        { rank: 10, user: { displayName: "someone_else" }, score: 124 },
-        { rank: 11, user: { displayName: "someone_else" }, score: 124 },
-        { rank: 12, user: { displayName: "someone_else" }, score: 124 },
-        { rank: 13, user: { displayName: "someone_else" }, score: 124 },
-        { rank: 14, user: { displayName: "someone_else" }, score: 124 },
-        { rank: 15, user: { displayName: "someone_else" }, score: 124 },
-        { rank: 16, user: { displayName: "someone_else" }, score: 124 },
-        { rank: 17, user: { displayName: "someone_else" }, score: 124 },
-    ];
+    // Determine the theme
+    const { theme } = getTheme(leaderboard?.theme);
 
     // If not found, throw a 404
     if (!isLoadingLeaderboard && !leaderboard) {
@@ -57,7 +41,7 @@ const LeaderboardPage = () => {
             >
                 &nbsp;
             </div>
-            <div className="relative z-10 min-h-full w-full overflow-y-auto sm:p-6 lg:p-8">
+            <div className="relative z-10 w-full overflow-y-auto p-4 sm:p-6 lg:p-8">
                 <div className="mx-auto flex h-full max-w-2xl flex-col items-center justify-start">
                     <div className="flex flex-col items-center justify-start space-y-2 py-8 sm:space-y-3 sm:py-16">
                         <Logo color={theme.logoColor} />
@@ -67,35 +51,46 @@ const LeaderboardPage = () => {
                     </div>
                     <div
                         className={classNames(
-                            "w-full flex-1 rounded-t-3xl p-4 sm:rounded-b-3xl lg:p-6",
+                            "w-full flex-1 rounded-3xl p-4 lg:p-6",
                             theme.scoreCardContainerClasses
                         )}
                     >
-                        {scores.map((score, scoreIdx) => (
-                            <Fragment key={`${score.rank}`}>
-                                {scoreIdx === 3 && (
-                                    <div
-                                        className={classNames(
-                                            "mb-3 flex flex-row items-center justify-center sm:mb-4",
-                                            theme.scoreCardDividerClasses
-                                        )}
-                                    >
-                                        <EllipsisHorizontalIcon className="h-10 w-10" />
-                                    </div>
-                                )}
-                                <UserScoreCard
-                                    theme={theme.scoreCardClasses(
-                                        score.rank,
-                                        scoreIdx,
-                                        scores.length
+                        {isLoadingScores ? (
+                            <div className="opacity-85 flex flex-row items-center justify-center space-x-2">
+                                <Spinner className="h-6 w-6 text-white" />
+                                <p className="text-white">Loading scores...</p>
+                            </div>
+                        ) : scores.length > 0 ? (
+                            scores.map((score, scoreIdx) => (
+                                <Fragment key={`${score.user.usersId}`}>
+                                    {scoreIdx === 3 && (
+                                        <div
+                                            className={classNames(
+                                                "mb-3 flex flex-row items-center justify-center sm:mb-4",
+                                                theme.scoreCardDividerClasses
+                                            )}
+                                        >
+                                            <EllipsisHorizontalIcon className="h-10 w-10" />
+                                        </div>
                                     )}
-                                    rankPrefix={theme.rankPrefix}
-                                    rank={score.rank}
-                                    user={score.user}
-                                    score={`${score.score}`}
-                                />
-                            </Fragment>
-                        ))}
+                                    <UserScoreCard
+                                        theme={theme.scoreCardClasses(
+                                            score.rank,
+                                            scoreIdx,
+                                            scores.length
+                                        )}
+                                        rankPrefix={theme.rankPrefix}
+                                        rank={score.rank}
+                                        user={score.user}
+                                        score={`${score.score}`}
+                                    />
+                                </Fragment>
+                            ))
+                        ) : (
+                            <div className="opacity-85 opacity-85 flex flex-row items-center justify-center space-x-2 text-white">
+                                This leaderboard has no scores, yet!
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

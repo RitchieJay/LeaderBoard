@@ -119,3 +119,21 @@ export const useArchiveLeaderboardByUrlName = (options) => {
         },
     });
 };
+
+export const useGetScoresForLeaderboard = (urlName) => {
+    const axios = useAxios();
+    const { accessToken } = useAccessToken();
+
+    const options = !!accessToken
+        ? { headers: { Authorization: `Bearer ${accessToken}` } }
+        : undefined;
+
+    return useQuery({
+        queryKey: ["leaderboards", urlName, "scores"],
+        queryFn: async () => {
+            const response = await axios.get(`leaderboards/${urlName}/scores`, options);
+            return response.data;
+        },
+        keepPreviousData: true,
+    });
+};
