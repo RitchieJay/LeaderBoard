@@ -1,6 +1,6 @@
 import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid";
 import classNames from "classnames";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useGetLeaderboardByUrlName, useGetScoresForLeaderboard } from "../api/leaderboards";
 import Heading from "../components/heading";
@@ -9,6 +9,7 @@ import PageLoader from "../components/page-loader";
 import Spinner from "../components/spinner";
 import UserScoreCard from "../components/user-score-card";
 import { getTheme } from "../themes";
+import { setDocumentTitle } from "../utils/dom";
 import { throwNotFound } from "../utils/routing";
 
 const LeaderboardPage = () => {
@@ -26,6 +27,11 @@ const LeaderboardPage = () => {
     if (!isLoadingLeaderboard && !leaderboard) {
         throwNotFound();
     }
+
+    // Set document title
+    useEffect(() => {
+        setDocumentTitle(leaderboard?.name ?? "Leaderboard");
+    }, [leaderboard?.name]);
 
     return isLoadingLeaderboard ? (
         <div className="p-4 sm:p-6 lg:p-8">
