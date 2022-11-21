@@ -1,7 +1,6 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import classNames from "classnames";
 import Badge from "../../../components/badge";
-import Link from "../../../components/link";
+import Button from "../../../components/button";
 import { sortFullName } from "../../../utils/table";
 
 const columnHelper = createColumnHelper();
@@ -11,19 +10,6 @@ export const columns = (handleOpenEditModal) => [
         id: "displayName",
         header: "Username",
         sortDescFirst: false,
-        meta: {
-            cell: {
-                renderFn: (cell, children, className) => (
-                    <Link
-                        as="span"
-                        className={classNames("inline-block", className)}
-                        onClick={() => handleOpenEditModal(cell.row.original)}
-                    >
-                        {children}
-                    </Link>
-                ),
-            },
-        },
     }),
     columnHelper.accessor((row) => `${row.person.forename} ${row.person.surname}`, {
         id: "name",
@@ -35,8 +21,8 @@ export const columns = (handleOpenEditModal) => [
                 { forename: b.original.person.forename, surname: b.original.person.surname }
             ),
         meta: {
-            cell: { className: "hidden sm:table-cell" },
-            header: { className: "hidden sm:table-cell" },
+            cell: { className: "hidden md:table-cell" },
+            header: { className: "hidden md:table-cell" },
         },
     }),
     columnHelper.accessor((row) => row.person.username, {
@@ -44,8 +30,8 @@ export const columns = (handleOpenEditModal) => [
         header: "Email",
         sortDescFirst: false,
         meta: {
-            cell: { className: "hidden md:table-cell" },
-            header: { className: "hidden md:table-cell" },
+            cell: { className: "hidden lg:table-cell" },
+            header: { className: "hidden lg:table-cell" },
         },
     }),
     columnHelper.accessor("isAdmin", {
@@ -55,7 +41,28 @@ export const columns = (handleOpenEditModal) => [
         cell: ({ getValue }) =>
             getValue() ? <Badge color="brand">Admin</Badge> : <Badge color="default">User</Badge>,
         meta: {
-            cell: { wrapperClassName: "text-center" },
+            cell: { wrapperClassName: "hidden sm:table-cell text-center" },
+            header: { wrapperClassName: "hidden sm:flex" },
+        },
+    }),
+    columnHelper.display({
+        id: "actions",
+        header: "Actions",
+        meta: {
+            cell: {
+                className: "justify-center",
+                renderFn: (cell, children, className) => (
+                    <div className="flex flex-row items-center justify-center">
+                        <Button
+                            size="sm"
+                            type="button"
+                            onClick={() => handleOpenEditModal(cell.row.original)}
+                        >
+                            Edit
+                        </Button>
+                    </div>
+                ),
+            },
             header: { wrapperClassName: "justify-center" },
         },
     }),

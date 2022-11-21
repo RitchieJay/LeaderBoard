@@ -34,6 +34,7 @@ const Button = ({
                 "hover:bg-brand-50": color === "white" && !disabled,
 
                 // Sizes
+                "px-2 py-1 text-xs": size === "sm",
                 "px-5 py-2.5 text-sm": size === "base",
                 "px-6 py-3 text-base": size === "lg",
 
@@ -50,7 +51,7 @@ const Button = ({
 Button.propTypes = {
     as: PropTypes.elementType,
     color: PropTypes.oneOf(["default", "brand", "red", "white"]),
-    size: PropTypes.oneOf(["base", "lg"]),
+    size: PropTypes.oneOf(["sm", "base", "lg"]),
     disabled: PropTypes.bool,
     children: PropTypes.node,
     className: PropTypes.string,
