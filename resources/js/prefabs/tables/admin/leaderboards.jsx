@@ -2,6 +2,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import classNames from "classnames";
 import { format, parseISO } from "date-fns";
 import Badge from "../../../components/badge";
+import Button from "../../../components/button";
 import Link from "../../../components/link";
 import { getTheme } from "../../../themes";
 
@@ -16,9 +17,9 @@ export const columns = (handleOpenEditModal) => [
             cell: {
                 renderFn: (cell, children, className) => (
                     <Link
-                        as="span"
                         className={classNames("inline-block", className)}
-                        onClick={() => handleOpenEditModal(cell.row.original)}
+                        to={`/l/${cell.row.original.urlName}`}
+                        target="_blank"
                     >
                         {children}
                     </Link>
@@ -45,8 +46,36 @@ export const columns = (handleOpenEditModal) => [
         sortDescFirst: false,
         cell: ({ getValue }) => format(parseISO(getValue()), "dd/MM/yyyy"),
         meta: {
-            cell: { className: "hidden sm:table-cell" },
-            header: { className: "hidden sm:table-cell" },
+            cell: { className: "hidden md:table-cell" },
+            header: { className: "hidden md:table-cell" },
+        },
+    }),
+    columnHelper.display({
+        id: "actions",
+        header: "Actions",
+        meta: {
+            cell: {
+                className: "justify-center",
+                renderFn: (cell, children, className) => (
+                    <div className="flex flex-row items-center justify-center space-x-2">
+                        <Button
+                            size="sm"
+                            type="button"
+                            onClick={() => handleOpenEditModal(cell.row.original)}
+                        >
+                            Edit
+                        </Button>
+                        <Button
+                            size="sm"
+                            type="button"
+                            onClick={() => console.log("SCORE MODAL HERE")}
+                        >
+                            Scores
+                        </Button>
+                    </div>
+                ),
+            },
+            header: { wrapperClassName: "justify-center" },
         },
     }),
 ];
