@@ -59,6 +59,8 @@ Route::middleware(["auth", "api.ensure-user-is-admin"])->group(function ()
 		{
 			Route::patch("/", [LeaderboardsController::class, "updateLeaderboardByUrlName"]);
 			Route::delete("/", [LeaderboardsController::class, "archiveLeaderboardByUrlName"]);
+
+			Route::patch("/users/{displayName}/score", [LeaderboardsController::class, "updateLeaderboardScoreForUser"]);
 		});
 	});
 });

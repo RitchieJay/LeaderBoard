@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateLeaderboardRequest;
+use App\Http\Requests\UpdateLeaderboardScoreForUserRequest;
 use App\Repositories\LeaderboardsRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -137,5 +138,23 @@ class LeaderboardsController extends Controller
 		);
 
 		return response()->json($scores);
+	}
+
+	public function updateLeaderboardScoreForUser(UpdateLeaderboardScoreForUserRequest $request, string $leaderboardUrlName, string $userDisplayName): JsonResponse
+	{
+		DB::transaction(function () use ($request, $leaderboardUrlName, $userDisplayName) {
+			$requestUser = $request->user();
+			$data = $request->validated();
+
+			// Execute the action
+			$this->leaderboardsRepo->updateLeaderboardScoreForUser(
+				$leaderboardUrlName,
+				$userDisplayName,
+				$data['score'],
+				$requestUser->person->personCode
+			);
+		});
+
+		return response()->json("OK");
 	}
 }

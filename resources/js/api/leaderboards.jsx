@@ -137,3 +137,29 @@ export const useGetScoresForLeaderboard = (urlName) => {
         keepPreviousData: true,
     });
 };
+
+export const useUpdateLeaderboardScoreForUser = (leaderboardUrlName, options) => {
+    const axios = useAxios();
+    const { accessToken } = useAccessToken();
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        ...options,
+        mutationFn: async ({ userDisplayName, ...data }) => {
+            const response = await axios.patch(
+                `leaderboards/${leaderboardUrlName}/users/${userDisplayName}/score`,
+                data,
+                {
+                    headers: { Authorization: `Bearer ${accessToken}` },
+                }
+            );
+            return response.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["leaderboards", leaderboardUrlName] });
+            if (options?.onSuccess) {
+                options.onSuccess();
+            }
+        },
+    });
+};

@@ -103,6 +103,19 @@ class LeaderboardsRepository
 		);
 	}
 
+	public function updateLeaderboardScoreForUser(string $leaderboardUrlName, string $userDisplayName, string $score, int $updatedBy): void
+	{
+		// Fetch the data
+		DB::select($this->sqlFromFile("leaderboards/update-leaderboard-score-for-user.sql"), [
+			":leaderboard_url_name" => $leaderboardUrlName,
+			":user_display_name" => $userDisplayName,
+			":score" => $score,
+			":updated_by" => $updatedBy
+		]);
+
+		// NOTE: We don't return anything here
+	}
+
 	public function rankScores(array &$scores, string $rankingMethod): void
 	{
 		switch ($rankingMethod) {
@@ -112,7 +125,7 @@ class LeaderboardsRepository
 		}
 	}
 
-	public function rankScoresNumericHighToLow(array &$scores): void
+	private function rankScoresNumericHighToLow(array &$scores): void
 	{
 		// Sort the scores in descending order
 		usort($scores, function ($a, $b) {

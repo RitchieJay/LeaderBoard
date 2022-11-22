@@ -18,6 +18,7 @@ const Combobox = forwardRef(
             withLabel,
             withHelper,
             hasErrors = false,
+            inputProps,
             ...rest
         },
         ref
@@ -30,6 +31,7 @@ const Combobox = forwardRef(
             )}
             <div className="relative shadow-sm">
                 <BaseCombobox.Input
+                    {...inputProps}
                     className={classNames(
                         "block w-full rounded-md border bg-white px-4 py-2.5 text-sm focus:outline-none focus:ring-1",
                         {
@@ -124,6 +126,7 @@ Combobox.propTypes = {
     withLabel: PropTypes.node,
     withHelper: PropTypes.node,
     hasErrors: PropTypes.bool,
+    inputProps: PropTypes.object,
 };
 
 export default Combobox;

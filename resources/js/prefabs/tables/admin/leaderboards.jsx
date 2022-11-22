@@ -8,7 +8,7 @@ import { getTheme } from "../../../themes";
 
 const columnHelper = createColumnHelper();
 
-export const columns = (handleOpenEditModal, handleOpenScoresModal) => [
+export const columns = (handleOpenEditModal, handleOpenScoresModal = null) => [
     columnHelper.accessor("name", {
         id: "name",
         header: "Name",
@@ -65,13 +65,15 @@ export const columns = (handleOpenEditModal, handleOpenScoresModal) => [
                         >
                             Edit
                         </Button>
-                        <Button
-                            size="sm"
-                            type="button"
-                            onClick={() => handleOpenScoresModal(cell.row.original)}
-                        >
-                            Scores
-                        </Button>
+                        {handleOpenScoresModal && (
+                            <Button
+                                size="sm"
+                                type="button"
+                                onClick={() => handleOpenScoresModal(cell.row.original)}
+                            >
+                                Scores
+                            </Button>
+                        )}
                     </div>
                 ),
             },

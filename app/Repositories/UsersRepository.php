@@ -25,10 +25,12 @@ class UsersRepository
 		return new User($results[0], $includePerson);
 	}
 
-	public function getUsers(bool $includePerson = false): array
+	public function getUsers(bool $includePerson = false, bool $includeInactive = false): array
 	{
 		// Fetch the data
-		$results = DB::select($this->sqlFromFile("users/get-users.sql"));
+		$results = DB::select($this->sqlFromFile("users/get-users.sql"), [
+			":include_inactive" => $includeInactive
+		]);
 
 		return array_map(
 			fn ($row) => new User($row, $includePerson),

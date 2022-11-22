@@ -15,7 +15,7 @@ const pageTabs = [
 
 const AdminUsersPage = () => {
     const { setupPage, activeTab: activePageTab } = usePage();
-    const { data: users = [], isFetching: isLoadingUsers } = useGetUsers();
+    const { data: users = [], isFetching: isLoadingUsers } = useGetUsers(true);
 
     // Configure edit modal state
     const [editModalState, setEditModalState] = useState({

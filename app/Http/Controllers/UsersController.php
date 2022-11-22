@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GetUsersRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Repositories\UsersRepository;
 use Illuminate\Http\JsonResponse;
@@ -22,11 +23,14 @@ class UsersController extends Controller
 		return response()->json($request->user());
 	}
 
-	public function getUsers(Request $request): JsonResponse
+	public function getUsers(GetUsersRequest $request): JsonResponse
 	{
+		$data = $request->validated();
+
 		// Fetch the data
 		$users = $this->usersRepo->getUsers(
-			!!$request->user()
+			!!$request->user(),
+			(bool)$data['includeInactive']
 		);
 
 		return response()->json($users);

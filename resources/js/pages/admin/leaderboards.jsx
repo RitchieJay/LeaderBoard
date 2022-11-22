@@ -105,7 +105,7 @@ const AdminLeaderboardsPage = () => {
             {activePageTab === "archived" && (
                 <Table
                     data={archivedLeaderboards}
-                    columns={leaderboardsTableColumns(handleOpenEditModal, handleOpenScoresModal)}
+                    columns={leaderboardsTableColumns(handleOpenEditModal)}
                     headerProps={{
                         globalFilterProps: {
                             placeholder: "Search leaderboards...",

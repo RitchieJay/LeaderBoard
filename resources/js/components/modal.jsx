@@ -49,7 +49,7 @@ const Modal = ({
                             className={classNames(
                                 "relative w-full transform overflow-hidden rounded-lg bg-white p-5 text-left shadow-xl transition-all sm:max-w-xl sm:px-10 sm:py-8",
                                 {
-                                    "md:max-w-2xl lg:max-w-4xl lg:px-12 lg:py-10 xl:max-w-5xl":
+                                    "md:max-w-2xl lg:max-w-4xl lg:px-12 lg:py-10 xl:max-w-4xl":
                                         isWide,
                                     "lg:max-w-2xl lg:px-12 lg:py-10": !isWide,
                                 }

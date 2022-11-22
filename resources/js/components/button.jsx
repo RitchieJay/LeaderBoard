@@ -15,7 +15,7 @@ const Button = ({
         {...rest}
         disabled={disabled}
         className={classNames(
-            "inline-flex shrink-0 items-center rounded-md border font-medium shadow-sm focus:outline-none",
+            "inline-flex shrink-0 items-center justify-center rounded-md border font-medium shadow-sm focus:outline-none",
             {
                 // Colors
                 "border-gray-300 bg-white text-gray-700 focus:ring-2 focus:ring-offset-2":

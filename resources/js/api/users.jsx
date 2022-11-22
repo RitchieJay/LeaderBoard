@@ -18,7 +18,7 @@ export const useGetMe = () => {
     });
 };
 
-export const useGetUsers = () => {
+export const useGetUsers = (includeInactive = false) => {
     const axios = useAxios();
     const { accessToken } = useAccessToken();
 
@@ -27,6 +27,9 @@ export const useGetUsers = () => {
         queryFn: async () => {
             const response = await axios.get("users", {
                 headers: { Authorization: `Bearer ${accessToken}` },
+                params: {
+                    includeInactive: includeInactive ? 1 : 0,
+                },
             });
             return response.data;
         },
