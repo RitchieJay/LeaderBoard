@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { Controller } from "react-hook-form";
+import Alert from "../../../components/alert";
 import Button from "../../../components/button";
 import Combobox from "../../../components/combobox";
 import Input from "../../../components/input";
@@ -23,6 +24,7 @@ const AdminEditUserModal = ({ user, isOpen, onClose, ...rest }) => {
         archiveUser,
         isPerformingAction,
         didCompleteAction,
+        didFailAction,
         errors,
     } = useForm(user);
 
@@ -43,6 +45,7 @@ const AdminEditUserModal = ({ user, isOpen, onClose, ...rest }) => {
                     className="flex flex-col space-y-4 sm:space-y-6 lg:space-y-8"
                     onSubmit={handleFormSubmit}
                 >
+                    {didFailAction && <Alert color="red">Something went wrong. Try again</Alert>}
                     <div>
                         <Input
                             type="text"

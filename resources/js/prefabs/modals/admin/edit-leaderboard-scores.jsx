@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 import { useGetScoresForLeaderboard } from "../../../api/leaderboards";
+import Alert from "../../../components/alert";
 import Button from "../../../components/button";
 import Combobox from "../../../components/combobox";
 import Heading from "../../../components/heading";
@@ -25,6 +26,7 @@ const AdminEditLeaderboardScoresModal = ({ leaderboard, isOpen, onClose, ...rest
         filteredUsers,
         isUpdatingScore,
         didUpdateScore,
+        didFailUpdatingScore,
         errors,
     } = useForm(leaderboard);
 
@@ -47,6 +49,11 @@ const AdminEditLeaderboardScoresModal = ({ leaderboard, isOpen, onClose, ...rest
                 <PageLoader />
             ) : (
                 <>
+                    {didFailUpdatingScore && (
+                        <Alert color="red" className="mb-4">
+                            Something went wrong. Try again
+                        </Alert>
+                    )}
                     <div className="mb-4 rounded-md border border-gray-300 bg-gray-50 p-4 sm:mb-6 sm:p-6 lg:mb-8">
                         <Heading level={3} className="mb-4">
                             Add Score

@@ -50,11 +50,14 @@ const Combobox = forwardRef(
                 <BaseCombobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-3 focus:outline-none">
                     {hasErrors ? (
                         <ExclamationCircleIcon
-                            className="h-5 w-5 text-red-500"
+                            className="h-5 w-5 bg-white text-red-500"
                             aria-hidden="true"
                         />
                     ) : (
-                        <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                        <ChevronUpDownIcon
+                            className="h-5 w-5 bg-white text-gray-400"
+                            aria-hidden="true"
+                        />
                     )}
                 </BaseCombobox.Button>
 

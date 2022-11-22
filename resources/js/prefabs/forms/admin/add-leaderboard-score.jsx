@@ -23,6 +23,7 @@ const useForm = (leaderboard) => {
         mutate: updateScore,
         isLoading: isUpdatingScore,
         isSuccess: didUpdateScore,
+        isError: didFailUpdatingScore,
     } = useUpdateLeaderboardScoreForUser(leaderboard?.urlName);
 
     // User
@@ -114,6 +115,7 @@ const useForm = (leaderboard) => {
         // Action management
         isUpdatingScore,
         didUpdateScore,
+        didFailUpdatingScore,
 
         // Errors
         errors: {

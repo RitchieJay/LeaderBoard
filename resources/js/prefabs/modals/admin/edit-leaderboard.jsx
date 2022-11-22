@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { useCallback, useEffect } from "react";
+import Alert from "../../../components/alert";
 import Button from "../../../components/button";
 import Input from "../../../components/input";
 import Link from "../../../components/link";
@@ -23,6 +24,7 @@ const AdminEditLeaderboardModal = ({ leaderboard, isOpen, onClose, ...rest }) =>
         isLoadingRankingMethods,
         isPerformingAction,
         didCompleteAction,
+        didFailAction,
         errors,
     } = useForm(leaderboard);
 
@@ -57,6 +59,7 @@ const AdminEditLeaderboardModal = ({ leaderboard, isOpen, onClose, ...rest }) =>
                     className="flex flex-col space-y-4 sm:space-y-6 lg:space-y-8"
                     onSubmit={handleFormSubmit}
                 >
+                    {didFailAction && <Alert color="red">Something went wrong. Try again</Alert>}
                     <div>
                         <Input
                             type="text"

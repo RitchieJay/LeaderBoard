@@ -38,16 +38,19 @@ const useForm = (user) => {
         mutate: createUser,
         isLoading: isCreatingUser,
         isSuccess: didCreateUser,
+        isError: didFailCreatingUser,
     } = useCreateUser();
     const {
         mutate: updateUser,
         isLoading: isUpdatingUser,
         isSuccess: didUpdateUser,
+        isError: didFailUpdatingUser,
     } = useUpdateUserByDisplayName();
     const {
         mutate: archiveUser,
         isLoading: isArchivingUser,
         isSuccess: didArchiveUser,
+        isError: didFailArchivingUser,
     } = useArchiveUserByDisplayName();
 
     // Action management
@@ -57,6 +60,9 @@ const useForm = (user) => {
     const didCompleteAction = useMemo(() => {
         return didCreateUser || didUpdateUser || didArchiveUser;
     }, [didCreateUser, didUpdateUser, didArchiveUser]);
+    const didFailAction = useMemo(() => {
+        return didFailCreatingUser || didFailUpdatingUser || didFailArchivingUser;
+    }, [didFailCreatingUser, didFailUpdatingUser, didFailArchivingUser]);
 
     // Form errors
     const displayNameError = useMemo(() => {
@@ -129,6 +135,7 @@ const useForm = (user) => {
         // Action management
         isPerformingAction,
         didCompleteAction,
+        didFailAction,
 
         // Errors
         errors: {

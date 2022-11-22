@@ -142,6 +142,7 @@ class LeaderboardsController extends Controller
 
 	public function updateLeaderboardScoreForUser(UpdateLeaderboardScoreForUserRequest $request, string $leaderboardUrlName, string $userDisplayName): JsonResponse
 	{
+		abort(500);
 		DB::transaction(function () use ($request, $leaderboardUrlName, $userDisplayName) {
 			$requestUser = $request->user();
 			$data = $request->validated();

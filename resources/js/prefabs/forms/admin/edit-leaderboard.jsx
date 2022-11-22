@@ -77,16 +77,19 @@ const useForm = (leaderboard) => {
         mutate: createLeaderboard,
         isLoading: isCreatingLeaderboard,
         isSuccess: didCreateLeaderboard,
+        isError: didFailCreatingLeaderboard,
     } = useCreateLeaderboard();
     const {
         mutate: updateLeaderboard,
         isLoading: isUpdatingLeaderboard,
         isSuccess: didUpdateLeaderboard,
+        isError: didFailUpdatingLeaderboard,
     } = useUpdateLeaderboardByUrlName();
     const {
         mutate: archiveLeaderboard,
         isLoading: isArchivingLeaderboard,
         isSuccess: didArchiveLeaderboard,
+        isError: didFailArchivingLeaderboard,
     } = useArchiveLeaderboardByUrlName();
 
     // Action management
@@ -96,6 +99,11 @@ const useForm = (leaderboard) => {
     const didCompleteAction = useMemo(() => {
         return didCreateLeaderboard || didUpdateLeaderboard || didArchiveLeaderboard;
     }, [didCreateLeaderboard, didUpdateLeaderboard, didArchiveLeaderboard]);
+    const didFailAction = useMemo(() => {
+        return (
+            didFailCreatingLeaderboard || didFailUpdatingLeaderboard || didFailArchivingLeaderboard
+        );
+    }, [didFailCreatingLeaderboard, didFailUpdatingLeaderboard, didFailArchivingLeaderboard]);
 
     // Form errors
     const nameError = useMemo(() => {
@@ -190,6 +198,7 @@ const useForm = (leaderboard) => {
         isLoadingRankingMethods,
         isPerformingAction,
         didCompleteAction,
+        didFailAction,
 
         // Errors
         errors: {
