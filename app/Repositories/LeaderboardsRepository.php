@@ -90,11 +90,11 @@ class LeaderboardsRepository
 		// NOTE: We don't return anything here
 	}
 
-	public function getScoresForLeaderboard(int $leaderboardsId, bool $includePerson = false): array
+	public function getScoresForLeaderboard(string $urlName, bool $includePerson = false): array
 	{
 		// Fetch the data
 		$results = DB::select($this->sqlFromFile("leaderboards/get-scores-for-leaderboard.sql"), [
-			":leaderboards_id" => $leaderboardsId,
+			":url_name" => $urlName,
 		]);
 
 		return array_map(

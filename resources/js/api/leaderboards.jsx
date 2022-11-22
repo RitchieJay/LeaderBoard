@@ -38,7 +38,7 @@ export const useGetLeaderboards = () => {
 
 export const useGetLeaderboardByUrlName = (urlName) => {
     const axios = useAxios();
-    const { accessToken } = useAccessToken();
+    const { accessToken, accessTokenIsLoading } = useAccessToken();
 
     const options = !!accessToken
         ? { headers: { Authorization: `Bearer ${accessToken}` } }
@@ -51,6 +51,7 @@ export const useGetLeaderboardByUrlName = (urlName) => {
             return response.data;
         },
         keepPreviousData: true,
+        enabled: !accessTokenIsLoading,
     });
 };
 
@@ -122,7 +123,7 @@ export const useArchiveLeaderboardByUrlName = (options) => {
 
 export const useGetScoresForLeaderboard = (urlName) => {
     const axios = useAxios();
-    const { accessToken } = useAccessToken();
+    const { accessToken, accessTokenIsLoading } = useAccessToken();
 
     const options = !!accessToken
         ? { headers: { Authorization: `Bearer ${accessToken}` } }
@@ -135,6 +136,7 @@ export const useGetScoresForLeaderboard = (urlName) => {
             return response.data;
         },
         keepPreviousData: true,
+        enabled: !accessTokenIsLoading,
     });
 };
 

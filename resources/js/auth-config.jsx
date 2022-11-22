@@ -5,7 +5,7 @@ export const msalConfig = {
         redirectUri: import.meta.env.VITE_AZURE_AUTH_REDIRECT_URI,
     },
     cache: {
-        cacheLocation: "sessionStorage",
+        cacheLocation: "localStorage",
         storeAuthStateInCookie: false,
     },
 };

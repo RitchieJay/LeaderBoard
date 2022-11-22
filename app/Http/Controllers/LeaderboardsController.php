@@ -127,7 +127,7 @@ class LeaderboardsController extends Controller
 
 		// Fetch the scores
 		$scores = $this->leaderboardsRepo->getScoresForLeaderboard(
-			$leaderboard->leaderboardsId,
+			$leaderboard->urlName,
 			!!$requestUser
 		);
 
