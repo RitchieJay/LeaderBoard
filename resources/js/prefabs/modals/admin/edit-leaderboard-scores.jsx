@@ -75,6 +75,26 @@ const AdminEditLeaderboardScoresModal = ({ leaderboard, isOpen, onClose, ...rest
         });
     }, [userQuery, users]);
 
+    // Form errors
+    const userError = useMemo(() => {
+        switch (errors?.user?.type) {
+            case "required":
+                return "User is required";
+            default:
+                return null;
+        }
+    }, [errors?.user?.type]);
+    const scoreError = useMemo(() => {
+        switch (errors?.score?.type) {
+            case "required":
+                return "Score is required";
+            case "maxLength":
+                return "Score is too long";
+            default:
+                return null;
+        }
+    }, [errors?.score?.type]);
+
     // Form submission
     const handleFormSubmit = useCallback(
         (data) => {
@@ -125,10 +145,8 @@ const AdminEditLeaderboardScoresModal = ({ leaderboard, isOpen, onClose, ...rest
                                                 placeholder: "User",
                                                 autoFocus: true,
                                             }}
-                                            hasErrors={!!errors.user}
-                                            withHelper={
-                                                errors.user ? "Error" : null
-                                            } /* TODO - copy how this is done elsewhere */
+                                            hasErrors={!!userError}
+                                            withHelper={userError}
                                             options={filteredUsers}
                                             getDisplayValue={(val) =>
                                                 val
@@ -153,10 +171,8 @@ const AdminEditLeaderboardScoresModal = ({ leaderboard, isOpen, onClose, ...rest
                                     type="text"
                                     id="edit-score-score"
                                     placeholder="Score"
-                                    hasErrors={!!errors.score}
-                                    withHelper={
-                                        errors.score ? "Error" : null
-                                    } /* TODO - copy how this is done elsewhere */
+                                    hasErrors={!!scoreError}
+                                    withHelper={scoreError}
                                     disabled={isUpdatingScore}
                                     {...register("score", {
                                         required: true,
