@@ -1,11 +1,7 @@
 import PropTypes from "prop-types";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import {
-    useGetScoresForLeaderboard,
-    useUpdateLeaderboardScoreForUser,
-} from "../../../api/leaderboards";
-import { useGetUsers } from "../../../api/users";
+import { useEffect } from "react";
+import { Controller } from "react-hook-form";
+import { useGetScoresForLeaderboard } from "../../../api/leaderboards";
 import Button from "../../../components/button";
 import Combobox from "../../../components/combobox";
 import Heading from "../../../components/heading";
@@ -14,108 +10,35 @@ import Modal, { ModalTitle } from "../../../components/modal";
 import PageLoader from "../../../components/page-loader";
 import Table from "../../../components/table";
 import { columns as leaderboardScoresTableColumns } from "../../../prefabs/tables/admin/leaderboard-scores";
+import useForm from "../../forms/admin/add-leaderboard-score";
 
 const AdminEditLeaderboardScoresModal = ({ leaderboard, isOpen, onClose, ...rest }) => {
     // Configure the form
     const {
         register,
-        reset,
         control,
-        formState: { errors },
-        handleSubmit,
-    } = useForm({
-        defaultValues: {
-            user: null,
-            score: "",
-        },
-    });
-
-    // Refs
-    const userInputRef = useRef(null);
-
-    // State
-    const [userQuery, setUserQuery] = useState("");
+        resetForm,
+        handleFormSubmit,
+        userInputRef,
+        setUserQuery,
+        isLoadingUsers,
+        filteredUsers,
+        isUpdatingScore,
+        didUpdateScore,
+        errors,
+    } = useForm(leaderboard);
 
     // Data
     const { data: scores = [], isLoading: isLoadingScores } = useGetScoresForLeaderboard(
         leaderboard.urlName
     );
-    const { data: users = [], isLoading: isLoadingUsers } = useGetUsers(false);
-
-    // Mutations
-    const {
-        mutate: updateScore,
-        isLoading: isUpdatingScore,
-        isSuccess: didUpdateScore,
-    } = useUpdateLeaderboardScoreForUser(leaderboard?.urlName);
-
-    // Filter users based on search input
-    const filteredUsers = useMemo(() => {
-        const userQueryParts = userQuery.toLowerCase().trim().split(" ");
-        return users.filter((u) => {
-            const userFields = [
-                u.person.forename.toLowerCase(),
-                u.person.surname.toLowerCase(),
-                u.displayName.toLowerCase(),
-                u.person.username.toLowerCase(),
-            ];
-            for (let q of userQueryParts) {
-                let matched = false;
-                for (let uf of userFields) {
-                    if (uf.includes(q)) {
-                        matched = true;
-                        break;
-                    }
-                }
-                if (!matched) {
-                    return false;
-                }
-            }
-            return true;
-        });
-    }, [userQuery, users]);
-
-    // Form errors
-    const userError = useMemo(() => {
-        switch (errors?.user?.type) {
-            case "required":
-                return "User is required";
-            default:
-                return null;
-        }
-    }, [errors?.user?.type]);
-    const scoreError = useMemo(() => {
-        switch (errors?.score?.type) {
-            case "required":
-                return "Score is required";
-            case "maxLength":
-                return "Score is too long";
-            default:
-                return null;
-        }
-    }, [errors?.score?.type]);
-
-    // Form submission
-    const handleFormSubmit = useCallback(
-        (data) => {
-            const payload = {
-                userDisplayName: data.user.displayName,
-                score: data.score,
-            };
-
-            // Create/edit scores
-            updateScore(payload);
-        },
-        [updateScore]
-    );
 
     // On successful update, clear the form
     useEffect(() => {
         if (didUpdateScore) {
-            reset();
-            userInputRef.current.focus();
+            resetForm();
         }
-    }, [didUpdateScore, reset]);
+    }, [didUpdateScore, resetForm]);
 
     return (
         <Modal {...rest} isOpen={isOpen} isWide={true} onClose={onClose}>
@@ -130,7 +53,7 @@ const AdminEditLeaderboardScoresModal = ({ leaderboard, isOpen, onClose, ...rest
                         </Heading>
                         <form
                             className="flex flex-col items-start justify-start space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4"
-                            onSubmit={handleSubmit(handleFormSubmit)}
+                            onSubmit={handleFormSubmit}
                         >
                             <div className="w-full sm:basis-8/12 md:basis-9/12">
                                 <Controller
@@ -145,8 +68,8 @@ const AdminEditLeaderboardScoresModal = ({ leaderboard, isOpen, onClose, ...rest
                                                 placeholder: "User",
                                                 autoFocus: true,
                                             }}
-                                            hasErrors={!!userError}
-                                            withHelper={userError}
+                                            hasErrors={!!errors.user}
+                                            withHelper={errors.user}
                                             options={filteredUsers}
                                             getDisplayValue={(val) =>
                                                 val
@@ -171,8 +94,8 @@ const AdminEditLeaderboardScoresModal = ({ leaderboard, isOpen, onClose, ...rest
                                     type="text"
                                     id="edit-score-score"
                                     placeholder="Score"
-                                    hasErrors={!!scoreError}
-                                    withHelper={scoreError}
+                                    hasErrors={!!errors.score}
+                                    withHelper={errors.score}
                                     disabled={isUpdatingScore}
                                     {...register("score", {
                                         required: true,
