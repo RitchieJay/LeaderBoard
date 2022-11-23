@@ -69,7 +69,7 @@ const LeaderboardPage = () => {
                         ) : scores.length > 0 ? (
                             scores.map((score, scoreIdx) => (
                                 <Fragment key={`${score.user.usersId}`}>
-                                    {scoreIdx === 3 && (
+                                    {score.rank === 4 && (
                                         <div
                                             className={classNames(
                                                 "mb-3 flex flex-row items-center justify-center sm:mb-4",
