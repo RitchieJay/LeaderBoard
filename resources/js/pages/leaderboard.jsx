@@ -1,6 +1,6 @@
 import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid";
 import classNames from "classnames";
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { useGetLeaderboardByUrlName, useGetScoresForLeaderboard } from "../api/leaderboards";
 import Heading from "../components/heading";
@@ -27,6 +27,16 @@ const LeaderboardPage = () => {
     if (!isLoadingLeaderboard && !leaderboard) {
         throwNotFound();
     }
+
+    // Determine where to insert a divider
+    const scoreDividerIdx = useMemo(() => {
+        for (let scoreIdx in scores) {
+            if (scores[scoreIdx].rank > 3) {
+                return +scoreIdx;
+            }
+        }
+        return null;
+    }, [scores]);
 
     // Set document title
     useEffect(() => {
@@ -69,7 +79,7 @@ const LeaderboardPage = () => {
                         ) : scores.length > 0 ? (
                             scores.map((score, scoreIdx) => (
                                 <Fragment key={`${score.user.usersId}`}>
-                                    {score.rank === 4 && (
+                                    {scoreDividerIdx !== null && scoreDividerIdx === scoreIdx && (
                                         <div
                                             className={classNames(
                                                 "mb-3 flex flex-row items-center justify-center sm:mb-4",
