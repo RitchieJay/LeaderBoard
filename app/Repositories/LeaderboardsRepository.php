@@ -103,7 +103,7 @@ class LeaderboardsRepository
 		);
 	}
 
-	public function updateLeaderboardScoreForUser(string $leaderboardUrlName, string $userDisplayName, string $score, int $updatedBy): void
+	public function updateLeaderboardScoreForUser(string $leaderboardUrlName, string $userDisplayName, string $score = null, int $updatedBy): void
 	{
 		// Fetch the data
 		DB::select($this->sqlFromFile("leaderboards/update-leaderboard-score-for-user.sql"), [

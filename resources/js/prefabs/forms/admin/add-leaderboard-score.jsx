@@ -68,8 +68,6 @@ const useForm = (leaderboard) => {
     }, [errors?.user?.type]);
     const scoreError = useMemo(() => {
         switch (errors?.score?.type) {
-            case "required":
-                return "Score is required";
             case "maxLength":
                 return "Score is too long";
             default:
@@ -111,6 +109,9 @@ const useForm = (leaderboard) => {
         setUserQuery,
         isLoadingUsers,
         filteredUsers,
+
+        // Mutations
+        updateScore,
 
         // Action management
         isUpdatingScore,

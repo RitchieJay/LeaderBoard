@@ -150,7 +150,7 @@ class LeaderboardsController extends Controller
 			$this->leaderboardsRepo->updateLeaderboardScoreForUser(
 				$leaderboardUrlName,
 				$userDisplayName,
-				$data['score'],
+				$data['score'] ?? null,
 				$requestUser->person->personCode
 			);
 		});

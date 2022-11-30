@@ -14,7 +14,7 @@ class UpdateLeaderboardScoreForUserRequest extends FormRequest
     public function rules()
     {
         return [
-            "score" => "required|string|max:100"
+            "score" => "string|max:100|nullable"
         ];
     }
 }

@@ -24,6 +24,7 @@ const AdminEditLeaderboardScoresModal = ({ leaderboard, isOpen, onClose, ...rest
         setUserQuery,
         isLoadingUsers,
         filteredUsers,
+        updateScore,
         isUpdatingScore,
         didUpdateScore,
         didFailUpdatingScore,
@@ -105,7 +106,6 @@ const AdminEditLeaderboardScoresModal = ({ leaderboard, isOpen, onClose, ...rest
                                     withHelper={errors.score}
                                     disabled={isUpdatingScore}
                                     {...register("score", {
-                                        required: true,
                                         maxLength: 100,
                                     })}
                                 />
@@ -125,7 +125,12 @@ const AdminEditLeaderboardScoresModal = ({ leaderboard, isOpen, onClose, ...rest
                     </div>
                     <Table
                         data={scores}
-                        columns={leaderboardScoresTableColumns()}
+                        columns={leaderboardScoresTableColumns((row) => {
+                            updateScore({
+                                userDisplayName: row.user.displayName,
+                                score: null,
+                            });
+                        })}
                         headerProps={{
                             className: "hidden",
                         }}
